@@ -1,4 +1,6 @@
 TP Final de AyDOO - Calendario
 ==============================
 
-Integrantes :
+Integrantes : 
+  Walter Davalos
+  Valentin Tourriles
