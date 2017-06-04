@@ -17,8 +17,8 @@ describe 'ConvertidorJsonObjeto' do
     expect(convertidor.convertirCalendario('[{"nombre": "calendario1"}]').size).to eq 1
   end
   
-  it 'El convertidor al recibir [{"nombre": "calendario1"}] deberia tener un array asociativo con nombre->calendario1 en su primer posicion' do
-    expect(convertidor.convertirCalendario('[{"nombre": "calendario1"}]')[0]["nombre"]).to eq "calendario1"
+  it 'El convertidor al recibir [{"nombre": "calendario1"}] deberia tener un array de objetos Calentario y calendario1 en su primer posicion' do
+    expect(convertidor.convertirCalendario('[{"nombre": "calendario1"}]')[0].getNombre).to eq "calendario1"
   end
   
   it 'El convertidor al recibir [{"nombre": "calendario1"},{"nombre": "calendario2"},{"nombre": "calendario3"}] deberia devolver un array de 3 posiciones' do
