@@ -1,1 +1,4 @@
-# aydoo2017ruby-TpFinal
+TP Final de AyDOO - Calendario
+==============================
+
+Integrantes :
