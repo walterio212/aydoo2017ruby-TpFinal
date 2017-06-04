@@ -15,10 +15,7 @@
   #  status=400 (si el nombres esta duplicado o nombre vacio)
   post '/calendarios' do
  
-    parsed_json = JSON.parse(request.body.read);
     
-    return parsed_json.size.to_s
-
   end
 
   #-------------------------------------
