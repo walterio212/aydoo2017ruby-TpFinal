@@ -8,3 +8,5 @@ gem 'guard'
 gem 'guard-rspec'
 gem 'rb-readline'
 gem 'sinatra', "1.4.7"
+gem 'json', "2.1.0"
+
