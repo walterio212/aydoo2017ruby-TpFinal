@@ -5,6 +5,8 @@ describe 'ConvertidorJsonObjeto' do
 
   let(:convertidor) { ConvertidorJsonObjeto.new }  
    
+  #Test convertir_calendario
+   
   it 'Test metodo convertir_calendario: El convertidor al recibir algo vacio deberia devolver nil' do
     expect(convertidor.convertir_calendario("")).to eq nil
   end
@@ -23,6 +25,16 @@ describe 'ConvertidorJsonObjeto' do
   
   it 'Test metodo convertir_calendario: El convertidor al recibir [{"nombre": "calendario1"},{"nombre": "calendario2"},{"nombre": "calendario3"}] deberia devolver un array de 3 posiciones' do
     expect(convertidor.convertir_calendario('[{"nombre": "calendario1"},{"nombre": "calendario2"},{"nombre": "calendario3"}]').size).to eq 3
+  end
+  
+  #Test convertir_evento
+  
+  it 'Test metodo convertir_evento: El convertidor al recibir algo vacio deberia devolver nil' do
+    expect(convertidor.convertir_evento("")).to eq nil
+  end
+  
+  it 'Test metodo convertir_evento: El convertidor al recibir nil devolver nil' do
+    expect(convertidor.convertir_evento(nil)).to eq nil
   end
   
 end

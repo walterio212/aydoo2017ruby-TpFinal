@@ -1,5 +1,7 @@
 require 'json'  #Libreria para parseo de JSON
 require_relative 'calendario'
+require_relative 'evento'
+require_relative 'recurrencia'
 
 class ConvertidorJsonObjeto
 
@@ -23,21 +25,30 @@ class ConvertidorJsonObjeto
   
   end
   
-  def convertir_eventos(json)
+  def convertir_evento(json)
     
     respuesta = nil;
     
     if json.nil? || json.empty? || ! es_json?(json)
       return respuesta
     end
-  
+    
     json = hacer_json_valido(json)
     
     respuesta = []
   
     json_parseado = JSON.parse(json);
     
-    json_parseado.each { |evento_json| respuesta << Evento.new(evento_json["nombre"]) }
+    json_parseado.each { |evento_json|
+      
+      
+      #TODO chequear errores como si existe el calendario etc
+    
+      #convierto la recurrencia en objeto
+  
+      recurrencia = crearRecurrencia(evento_json["recurrencia"])
+      
+      respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],evento_json["inicio"],evento_json["fin"],recurrencia) }
     
     return respuesta
   
@@ -69,4 +80,14 @@ class ConvertidorJsonObjeto
 
   end
 
+  
+  def crear_recurrencia(json)
+    
+    #chequear que la frecuencia sea una frecuencia valida
+    
+    Recurrencia.new(json["frecuencia"],DateTime.parse(json["fin"]).to_date)
+
+  end
+
+  
 end
