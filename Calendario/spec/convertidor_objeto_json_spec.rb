@@ -24,7 +24,7 @@ describe 'ConvertidorObjetoJson' do
   end
   
   it 'Test metodo convertir_calendario: El convertidor al recibir un array con 5 calendarios deberia devolver un array Json con esos calendarios' do
-    expect(convertidor.convertir_calendario([Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new     ("calendario4"),Calendario.new("calendario5")])).to eq '[{"nombre":"calendario1"},{"nombre":"calendario2"},{"nombre":"calendario3"},{"nombre":"calendario4"},{"nombre":"calendario5"}]'
+    expect(convertidor.convertir_calendario([Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new("calendario4"),Calendario.new("calendario5")])).to eq '[{"nombre":"calendario1"},{"nombre":"calendario2"},{"nombre":"calendario3"},{"nombre":"calendario4"},{"nombre":"calendario5"}]'
   end
   
 end

@@ -23,6 +23,26 @@ class ConvertidorJsonObjeto
   
   end
   
+  def convertir_eventos(json)
+    
+    respuesta = nil;
+    
+    if json.nil? || json.empty? || ! es_json?(json)
+      return respuesta
+    end
+  
+    json = hacer_json_valido(json)
+    
+    respuesta = []
+  
+    json_parseado = JSON.parse(json);
+    
+    json_parseado.each { |evento_json| respuesta << Evento.new(evento_json["nombre"]) }
+    
+    return respuesta
+  
+  end
+  
   private
   
   def es_json?(json)

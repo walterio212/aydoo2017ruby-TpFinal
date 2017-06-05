@@ -8,8 +8,7 @@ class ConvertidorObjetoJson
     
     array_json = "["
     
-    array_calendarios.each_with_index {
-      |calendario,index|
+    array_calendarios.each_with_index { |calendario,index|
            
       calendario_json = calendario.to_json
       
