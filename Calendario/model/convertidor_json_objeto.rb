@@ -46,7 +46,7 @@ class ConvertidorJsonObjeto
     
       #convierto la recurrencia en objeto
   
-      recurrencia = crearRecurrencia(evento_json["recurrencia"])
+      recurrencia = crear_recurrencia(evento_json["recurrencia"])
       
       respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],evento_json["inicio"],evento_json["fin"],recurrencia) }
     
