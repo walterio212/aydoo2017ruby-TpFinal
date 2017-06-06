@@ -39,29 +39,30 @@ describe 'ConvertidorJsonObjeto' do
   
   
   it 'Test metodo convertir_evento: 
-  El convertidor al recibir 
-  [
-    {
-        "calendario" : calendario1,
-        "id" : eventoTest,
-        "nombre" : fiesta,
-        "inicio" : ,
-        "fin" : ,
-        "recurrencia" : {
-            "frecuencia" : semanal,
-            "fin" : 2017-06-28
-        }
-    }
-    
-  ] 
-  deberia devolver un array de 1 posicion' do
+  El convertidor al recibir un solo objeto json deberia devolver un array de 1 posicion' do
     expect(convertidor.convertir_evento(
     '[{
         "calendario" : "calendario1",
         "id" : "eventoTest",
         "nombre" : "fiesta",
-        "inicio" : "",
-        "fin" : "",
+        "inicio" : "2017-03-31T18:00:00-03:00",
+        "fin" : "2017-03-31T18:00:00-03:00",
+        "recurrencia" : {
+            "frecuencia" : "semanal",
+            "fin" : "2017-03-31T18:00:00-03:00"
+        }
+    }]').size).to eq 1
+  
+  end
+  
+  it 'Test metodo convertir_evento: El convertidor al recibir un solo objeto json deberia devolver un array de 1 posicion con un evento con los valores especificados' do
+    expect(convertidor.convertir_evento(
+    '[{
+        "calendario" : "calendario1",
+        "id" : "eventoTest",
+        "nombre" : "fiesta",
+        "inicio" : "2017-06-28",
+        "fin" : "2017-06-28",
         "recurrencia" : {
             "frecuencia" : "semanal",
             "fin" : "2017-06-28"
@@ -71,50 +72,13 @@ describe 'ConvertidorJsonObjeto' do
   end
   
   it 'Test metodo convertir_evento: 
-  El convertidor al recibir 
-  [
-    {
-        "calendario" : calendario1,
-        "id" : eventoTest,
-        "nombre" : fiesta,
-        "inicio" : ,
-        "fin" : ,
-        "recurrencia" : {
-            "frecuencia" : semanal,
-            "fin" : 2017-06-28
-        }
-    },
-    {
-        "calendario" : calendario2,
-        "id" : eventoTest2,
-        "nombre" : fiesta2,
-        "inicio" : ,
-        "fin" : ,
-        "recurrencia" : {
-            "frecuencia" : semanal,
-            "fin" : 2017-06-28
-        }
-    },
-    {
-        "calendario" : calendario3,
-        "id" : eventoTest3,
-        "nombre" : fiesta3,
-        "inicio" : ,
-        "fin" : ,
-        "recurrencia" : {
-            "frecuencia" : semanal,
-            "fin" : 2017-06-28
-        }
-    }
-    
-  ] 
-  deberia devolver un array de 3 posiciones' do
+  El convertidor al recibir  3 objetos json deberia devolver un array de 3 posiciones' do
     expect(convertidor.convertir_evento('[{
         "calendario" : "calendario1",
         "id" : "eventoTest",
         "nombre" : "fiesta",
-        "inicio" : "",
-        "fin" : "",
+        "inicio" : "2017-06-28",
+        "fin" : "2017-06-28",
         "recurrencia" : {
             "frecuencia" : "semanal",
             "fin" : "2017-06-28"
@@ -124,8 +88,8 @@ describe 'ConvertidorJsonObjeto' do
           "calendario" : "calendario2",
           "id" : "eventoTest2",
           "nombre" : "fiesta2",
-          "inicio" : "",
-          "fin" : "",
+          "inicio" : "2017-06-28",
+          "fin" : "2017-06-28",
           "recurrencia" : {
               "frecuencia" : "semanal",
               "fin" : "2017-06-28"
@@ -135,8 +99,8 @@ describe 'ConvertidorJsonObjeto' do
           "calendario" : "calendario3",
           "id" : "eventoTest3",
           "nombre" : "fiesta3",
-          "inicio" : "",
-          "fin" : "",
+          "inicio" : "2017-06-28",
+          "fin" : "2017-06-28",
           "recurrencia" : {
               "frecuencia" : "semanal",
               "fin" : "2017-06-28"

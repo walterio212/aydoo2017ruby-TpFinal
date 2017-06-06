@@ -1,4 +1,5 @@
 require 'json'  #Libreria para parseo de JSON
+require 'date'  #necesario para el parseo de fechas
 require_relative 'calendario'
 require_relative 'evento'
 require_relative 'recurrencia'
@@ -44,11 +45,12 @@ class ConvertidorJsonObjeto
       
       #TODO chequear errores como si existe el calendario etc
     
-      #convierto la recurrencia en objeto
-  
+      #convierto la recurrencia en objeto y parseo las fechas (falta parsear bien las fechas, falla)
       recurrencia = crear_recurrencia(evento_json["recurrencia"])
+      #fecha_inicio = json["inicio"].to_date.strftime("%d/%m/%Y")
+      #fecha_fin = json["fin"].to_date.strftime("%d/%m/%Y") 
       
-      respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],evento_json["inicio"],evento_json["fin"],recurrencia) }
+      respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],Date.new,Date.new,recurrencia) }
     
     return respuesta
   
