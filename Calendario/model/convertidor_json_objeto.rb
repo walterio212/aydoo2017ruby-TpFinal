@@ -55,6 +55,20 @@ class ConvertidorJsonObjeto
     return respuesta
   
   end
+
+  def obtenerPropiedadDeJson(nombrePropiedad, json)
+    respuesta = nil;
+    
+    if json.nil? || json.empty? || ! es_json?(json)
+      return respuesta
+    end
+    
+    json_parseado = JSON.parse(json);
+    puts json_parseado
+    respuesta = json_parseado["nombre"]
+    
+    return respuesta
+  end
   
   private
   

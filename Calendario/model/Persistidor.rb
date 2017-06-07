@@ -1,6 +1,8 @@
 require 'json'
 require_relative '../model/calendario'
 require_relative '../model/GeneralError'
+require_relative '../model/GeneralError'
+require_relative '../model/convertidor_objeto_json'
 
 class Persistidor 
 
@@ -23,20 +25,24 @@ class Persistidor
 
   def obtenerCalendario(nombreCalendario)
     calendario = nil
-
+    calendarioJson = nil
+    lineaJson = nil
     nombreArchivo = nombreCalendario + ".txt"
 
     if(existeElArchivo?(nombreArchivo))
       
       archivo = @file.open(nombreArchivo, "r") do |f| 
         f.each_line do |linea|
+          lineaJson = linea
           calendarioJson = JSON.parse(linea)
           calendario = Calendario.new(calendarioJson["nombre"])
         end
       end      
     else 
-      raise GeneralError.new("No existe un calendario con el nombre ingresado")
+      raise GeneralError.new("No existe un calendario con el nombre ingresado: " + nombreCalendario)
     end
+
+    lineaJson
   end
 
   def existeElDirectorio?(nombre)

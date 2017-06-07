@@ -7,13 +7,18 @@ class GestorCalendario
 
   def initialize()
     @persistor = Persistidor.new(File, Dir)
-    @conversor = ConvertidorJsonObjeto.new()
+    @conversor = ConvertidorJsonObjeto.new()    
   end
 
   def crearCalendario(jsonCalendario)
     puts jsonCalendario
-    calendario = @conversor.convertirCalendario(jsonCalendario)[0]
+    calendario = @conversor.convertir_calendario(jsonCalendario)[0]
     @persistor.crearCalendario(calendario)
   end
+
+  def obtenerCalendario(jsonNombreCalendario)
+    calendario = @persistor.obtenerCalendario(jsonNombreCalendario)
+  end
+
 
 end

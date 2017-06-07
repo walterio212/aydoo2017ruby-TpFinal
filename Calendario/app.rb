@@ -56,8 +56,9 @@
   #}
   #status = 200
   #status = 404 (si no existe)
-  get '/calendarios/nombreCalendario' do
-
+  get '/calendarios/:nombre' do
+    gestor = GestorCalendario.new()
+    gestor.obtenerCalendario(params['nombre'])
   end
     
   #-------------------------------------
