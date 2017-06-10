@@ -1,7 +1,6 @@
 require 'json'
 require_relative '../model/calendario'
 require_relative '../model/GeneralError'
-require_relative '../model/GeneralError'
 require_relative '../model/convertidor_objeto_json'
 
 class Persistidor 
@@ -9,13 +8,15 @@ class Persistidor
   def initialize(fileClass, dirClass)
     @file = fileClass
     @dir = dirClass
+    @almacenamientoCalendario = "almacenamientoCalendario"
+    inicializarDirectorio()
   end 
 
   def crearCalendario(calendario)
-    nombre = calendario.getNombre()
-    nombreArchivo = nombre + ".txt"
-    if(!existeElArchivo?(nombreArchivo))      
-      archivo = @file.new(nombreArchivo, "w")
+    nombreCalendario = calendario.getNombre()
+    fullName = obtenerFullName(nombreCalendario)
+    if(!existeElArchivo?(fullName))      
+      archivo = @file.new(fullName, "w")
       archivo.puts(calendario.to_json)
       archivo.close
     else 
@@ -28,10 +29,11 @@ class Persistidor
     calendarioJson = nil
     lineaJson = nil
     nombreArchivo = nombreCalendario + ".txt"
+    fullName = obtenerFullName(nombreCalendario)
 
-    if(existeElArchivo?(nombreArchivo))
+    if(existeElArchivo?(fullName))
       
-      archivo = @file.open(nombreArchivo, "r") do |f| 
+      archivo = @file.open(fullName, "r") do |f| 
         f.each_line do |linea|
           lineaJson = linea
           calendarioJson = JSON.parse(linea)
@@ -45,11 +47,22 @@ class Persistidor
     lineaJson
   end
 
-  def existeElDirectorio?(nombre)
-    @file.directory?(nombre)
+  def inicializarDirectorio()
+      if(!existeElDirectorio?())
+        @dir.mkdir(@almacenamientoCalendario)
+      end
+  end
+
+  def existeElDirectorio?()
+    @file.directory?(@almacenamientoCalendario)
   end
 
   def existeElArchivo?(nombre)
     @file.file?(nombre)
+  end
+
+  def obtenerFullName(nombreCalendario)
+    nombreArchivo = nombreCalendario + ".txt"
+    @file.join(@almacenamientoCalendario, nombreArchivo)
   end
 end
