@@ -34,6 +34,7 @@ describe 'ConvertidorObjetoJson' do
   
   #TESTS DE CONVERSION DE EVENTOS
   
+  
   it 'TestMetodoConvertirEventoNilEnviadoDeberiaDevolverNil' do
     expect(convertidor.convertir_evento(nil)).to eq nil
   end
@@ -48,6 +49,35 @@ describe 'ConvertidorObjetoJson' do
     Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))  
 
         expect(convertidor.convertir_evento(evento)).to eq  '{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00","recurrencia":{"frecuencia":"semanal","fin":"2017-03-31T18:00:00-03:00"}}'   
+       
+  end
+  
+   it 'TestMetodoConvertirEvento:AlRecibirUnEventoDeberiaDevolverSuJson' do
+        
+    evento1 = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
+    
+     evento2 = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('diario',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
+    
+     evento3 = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))
+    
+    array_eventos = [evento1,evento2,evento3]    
+
+        expect(convertidor.convertir_eventos(array_eventos)).to eq  ['{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00","recurrencia":{"frecuencia":"semanal","fin":"2017-03-31T18:00:00-03:00"}}','{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00","recurrencia":{"frecuencia":"diario","fin":"2017-03-31T18:00:00-03:00"}}','{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00","recurrencia":{"frecuencia":"semanal","fin":"2017-03-31T18:00:00-03:00"}}']   
        
   end
   

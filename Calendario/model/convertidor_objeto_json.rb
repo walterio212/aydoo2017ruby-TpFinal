@@ -42,4 +42,27 @@ class ConvertidorObjetoJson
     
   end
   
+  def convertir_eventos(array_eventos)
+
+    if array_eventos.nil? || array_eventos.size == 0
+      return nil
+    end
+    
+      array_json = []
+    
+      array_eventos.each_with_index { 
+        
+        |evento,index|
+           
+        evento_json = JSON.generate(evento.to_json)
+      
+        array_json << evento_json      
+      
+      }    
+    
+    return array_json
+    
+    
+  end
+  
 end
