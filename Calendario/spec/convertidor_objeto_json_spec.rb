@@ -9,22 +9,26 @@ describe 'ConvertidorObjetoJson' do
     expect(convertidor.convertir_calendario(nil)).to eq nil
   end
   
-  
-  it 'Test metodo convertir_calendario: El convertidor al recibir un array vacio deberia devolver nil' do
-    expect(convertidor.convertir_calendario([])).to eq nil
-  end
-  
-  
   it 'Test metodo convertir_calendario: El convertidor al recibir un array con un calendario deberia devolver un array Json con ese calendario' do
-    expect(convertidor.convertir_calendario([Calendario.new("calendario1")])).to eq '[{"nombre":"calendario1"}]'
+  
+    calendario = Calendario.new("calendario1")
+  
+    expect(convertidor.convertir_calendario(calendario)).to eq '{"nombre":"calendario1"}'
   end
   
   it 'Test metodo convertir_calendario: El convertidor al recibir un array con 2 calendarios deberia devolver un array Json con esos calendarios' do
-    expect(convertidor.convertir_calendario([Calendario.new("calendario1"),Calendario.new("calendario2")])).to eq '[{"nombre":"calendario1"},{"nombre":"calendario2"}]'
+        
+    calendarios = [Calendario.new("calendario1"),Calendario.new("calendario2")]
+    
+    expect(convertidor.convertir_calendarios(calendarios)).to eq ['{"nombre":"calendario1"}','{"nombre":"calendario2"}']
   end
   
-  it 'Test metodo convertir_calendario: El convertidor al recibir un array con 5 calendarios deberia devolver un array Json con esos calendarios' do
-    expect(convertidor.convertir_calendario([Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new("calendario4"),Calendario.new("calendario5")])).to eq '[{"nombre":"calendario1"},{"nombre":"calendario2"},{"nombre":"calendario3"},{"nombre":"calendario4"},{"nombre":"calendario5"}]'
+   it 'Test metodo convertir_calendario: El convertidor al recibir un array con 5 calendarios deberia devolver un array Json con esos calendarios' do
+        
+    calendarios = [Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new("calendario4"),Calendario.new("calendario5")]
+    
+    expect(convertidor.convertir_calendarios(calendarios).size).to eq 5
   end
+  
   
 end

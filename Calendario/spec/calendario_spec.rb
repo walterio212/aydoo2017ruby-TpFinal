@@ -7,9 +7,9 @@ describe 'calendario' do
    
   it 'to_json devuelve el json del calendario' do
 
-    result = calendario.to_json
+    result = JSON.generate(calendario.to_json)
 
-    expect("{\"nombre\":\"calendario1\"}").to eq result.to_s
+    expect(result).to eq '{"nombre":"calendario1"}'
   end
 
 end
