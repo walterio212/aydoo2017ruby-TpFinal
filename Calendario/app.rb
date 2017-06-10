@@ -26,9 +26,10 @@
   #DELETE /calendarios/calendario1
   #status=200
   #status=404 (no encontrado)
+
   delete '/calendarios/:nombre' do
     gestor = GestorCalendario.new()
-    gestor.borrarCalendario(params['nombre'])  
+    gestor.borrarCalendario(params['nombre'])
   end
 
   #-------------------------------------
@@ -45,7 +46,14 @@
   #]
   #status=200  
   get '/calendarios' do
-
+    content_type :json
+    
+    convertidor = ConvertidorObjetoJson.new()
+  
+    calendarios = [Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new("calendario4"),Calendario.new("calendario5")]
+    
+    response.body = JSON.dump(convertidor.convertir_calendarios(calendarios))
+  
   end
 
   #-------------------------------------
