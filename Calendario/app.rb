@@ -2,7 +2,7 @@
   require 'rubygems'
   require 'json'  #Libreria para parseo de JSON
   require_relative './model/GestorCalendario'
-
+  
   #Testear json posteado -> curl -H "Content-Type: application/json" -X POST -d '[{"nombre": "calendario1"},{"nombre": "calendario2"}]'  http://localhost:4567/calendarios
   #Obtener parametros post ->     numero_obtenido = "#{params['x']}"
  
@@ -108,7 +108,35 @@
   # DEVUELVE LOS EVENTOS
   #------------------------------------- 
   # 
-  get '/eventos' do
+  get '/eventos' do   
+  
+    convertidor = ConvertidorObjetoJson.new()
+  
+    evento1 = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
+    
+     evento2 = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('diario',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
+    
+     evento3 = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))
+    
+    array_eventos = [evento1,evento2,evento3]
+    
+    convertidor.convertir_eventos(array_eventos);
+    
   
   end
   
