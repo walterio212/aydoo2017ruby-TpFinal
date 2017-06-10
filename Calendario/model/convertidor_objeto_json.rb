@@ -8,25 +8,37 @@ class ConvertidorObjetoJson
     
       array_json = []
     
-      array_calendarios.each_with_index { |calendario,index|
+      array_calendarios.each_with_index { 
+        
+        |calendario,index|
            
-      calendario_json = JSON.generate(calendario.to_json)
+        calendario_json = JSON.generate(calendario.to_json)
       
-      array_json << calendario_json      
+        array_json << calendario_json      
       
-    }    
+      }    
     
     return array_json
     
   end
   
-  def convertir_calendario(array_calendarios)
+  def convertir_calendario(calendario)
 
-    if array_calendarios.nil? 
+    if calendario.nil? 
       return nil
     end
     
-    return JSON.generate(array_calendarios.to_json)
+    return JSON.generate(calendario.to_json)
+    
+  end
+  
+  def convertir_evento(evento)
+
+    if evento.nil? 
+      return nil
+    end
+    
+    return JSON.generate(evento.to_json)
     
   end
   
