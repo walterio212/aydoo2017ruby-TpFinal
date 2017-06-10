@@ -35,3 +35,6 @@ build/
 .rvmrc
 .DS_Store
 .vagrant
+
+# directorio de aplicacion
+almacenamientoCalendario
