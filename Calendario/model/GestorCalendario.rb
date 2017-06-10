@@ -6,7 +6,7 @@ require_relative '../model/Persistidor'
 class GestorCalendario
 
   def initialize()
-    @persistor = Persistidor.new(File, Dir)
+    @persistor = Persistor.new(File, Dir)
     @conversor = ConvertidorJsonObjeto.new()    
   end
 
@@ -16,8 +16,12 @@ class GestorCalendario
     @persistor.crearCalendario(calendario)
   end
 
-  def obtenerCalendario(jsonNombreCalendario)
-    calendario = @persistor.obtenerCalendario(jsonNombreCalendario)
+  def obtenerCalendario(nombreCalendario)
+    calendario = @persistor.obtenerCalendario(nombreCalendario)
+  end
+
+  def borrarCalendario(nombreCalendario)
+    @persistor.borrarCalendario(nombreCalendario)
   end
 
 

@@ -26,8 +26,9 @@
   #DELETE /calendarios/calendario1
   #status=200
   #status=404 (no encontrado)
-  delete '/calendarios/' do
-  
+  delete '/calendarios/:nombre' do
+    gestor = GestorCalendario.new()
+    gestor.borrarCalendario(params['nombre'])  
   end
 
   #-------------------------------------

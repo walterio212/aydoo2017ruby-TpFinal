@@ -1,24 +1,24 @@
 require 'rspec' 
 require_relative '../model/calendario'
-require_relative '../model/Persistidor'
+require_relative '../model/Persistor'
 require_relative '../model/GeneralError'
 
-describe 'Persistidor' do 
+describe 'Persistor' do 
 
-  it 'Creacion de Persistidor no crea nada si el directorio existe' do
+  it 'Creacion de Persistor no crea nada si el directorio existe' do
     fileDouble = double('File', :directory? => true) 
     dirDouble = double('Dir')
     expect(dirDouble).not_to receive(:mkdir)
-    persistidor = Persistidor.new(fileDouble, dirDouble)
+    persistidor = Persistor.new(fileDouble, dirDouble)
   end
 
-  it 'Creacion de Persistidor inicializa el directorio si no existe' do
+  it 'Creacion de Persistor inicializa el directorio si no existe' do
     fileDouble = double('File', :directory? => false) 
     dirDouble = double('Dir')
 
     allow(dirDouble).to receive(:mkdir).with("almacenamientoCalendario") {"creado"}
     expect(dirDouble).to receive(:mkdir).with("almacenamientoCalendario")
-    persistidor = Persistidor.new(fileDouble, dirDouble)
+    persistidor = Persistor.new(fileDouble, dirDouble)
   end
 
   it 'Crear Calendario inexistente crea un nuevo archivo para el Calendario' do
@@ -32,7 +32,7 @@ describe 'Persistidor' do
     allow(fileDouble).to receive(:join).with("almacenamientoCalendario", "calendario 1.txt") {"almacenamientoCalendario/calendario 1.txt"} 
 
     fileDouble.should_receive(:new).with("almacenamientoCalendario/calendario 1.txt", "w").exactly(1).times
-    persistidor = Persistidor.new(fileDouble, dirDouble)
+    persistidor = Persistor.new(fileDouble, dirDouble)
 
     res = persistidor.crearCalendario(calendario)
     expect(res).to eq "archivo Cerrado"
@@ -45,7 +45,7 @@ describe 'Persistidor' do
     calendario = Calendario.new("calendario 1")
     allow(fileDouble).to receive(:join).with("almacenamientoCalendario", "calendario 1.txt") {"almacenamientoCalendario/calendario 1.txt"} 
 
-    persistidor = Persistidor.new(fileDouble, dirDouble)
+    persistidor = Persistor.new(fileDouble, dirDouble)
 
     expect{ persistidor.crearCalendario(calendario) }.
       to raise_error(GeneralError, "Ya existe un calendario con el nombre ingresado")
@@ -59,9 +59,34 @@ describe 'Persistidor' do
     calendario = Calendario.new("calendario 1")
     allow(fileDouble).to receive(:join).with("almacenamientoCalendario", "calendario.txt") {"almacenamientoCalendario/calendario.txt"} 
 
-    persistidor = Persistidor.new(fileDouble, dirDouble)
+    persistidor = Persistor.new(fileDouble, dirDouble)
 
     expect{ persistidor.obtenerCalendario("calendario") }.
       to raise_error(GeneralError, "No existe un calendario con el nombre ingresado: calendario")    
+  end
+
+  it 'Borrar Calendario inexistente lanza GeneralError' do
+    fileDouble = double('File', :directory? => true, :file? => false)
+    dirDouble = double('Dir')
+
+    allow(fileDouble).to receive(:join).with("almacenamientoCalendario", "calendario.txt") {"almacenamientoCalendario/calendario.txt"} 
+
+    persistidor = Persistor.new(fileDouble, dirDouble)
+
+    expect{ persistidor.borrarCalendario("calendario") }.
+      to raise_error(GeneralError, "No existe un calendario con el nombre ingresado: calendario")    
+  end
+
+  it 'Borrar Calendario existente borra el archivo' do
+    fileDouble = double('File', :directory? => true, :file? => true)
+    dirDouble = double('Dir')
+
+    allow(fileDouble).to receive(:join).with("almacenamientoCalendario", "calendario.txt") {"almacenamientoCalendario/calendario.txt"} 
+    allow(fileDouble).to receive(:delete).with("almacenamientoCalendario/calendario.txt") {"borrado"}
+    expect(fileDouble).to receive(:delete).with("almacenamientoCalendario/calendario.txt")
+
+    persistidor = Persistor.new(fileDouble, dirDouble)
+
+    persistidor.borrarCalendario("calendario")
   end
 end

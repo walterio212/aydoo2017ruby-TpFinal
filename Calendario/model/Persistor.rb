@@ -3,7 +3,7 @@ require_relative '../model/calendario'
 require_relative '../model/GeneralError'
 require_relative '../model/convertidor_objeto_json'
 
-class Persistidor 
+class Persistor 
 
   def initialize(fileClass, dirClass)
     @file = fileClass
@@ -28,7 +28,6 @@ class Persistidor
     calendario = nil
     calendarioJson = nil
     lineaJson = nil
-    nombreArchivo = nombreCalendario + ".txt"
     fullName = obtenerFullName(nombreCalendario)
 
     if(existeElArchivo?(fullName))
@@ -45,6 +44,16 @@ class Persistidor
     end
 
     lineaJson
+  end
+
+  def borrarCalendario(nombreCalendario)
+    fullName = obtenerFullName(nombreCalendario)
+
+    if(existeElArchivo?(fullName))
+      @file.delete(fullName)      
+    else 
+      raise GeneralError.new("No existe un calendario con el nombre ingresado: " + nombreCalendario)
+    end
   end
 
   def inicializarDirectorio()
