@@ -38,5 +38,19 @@ describe 'ConvertidorObjetoJson' do
     expect(convertidor.convertir_evento(nil)).to eq nil
   end
   
+  it 'TestMetodoConvertirEvento:AlRecibirUnEventoDeberiaDevolverSuJson' do
+        
+    evento = Evento.new(Calendario.new("Calendario1"),
+    "testEvento",
+    "fiesta",
+    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))  
+
+        expect(convertidor.convertir_evento(evento)).to eq  '{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00","recurrencia":{"frecuencia":"semanal","fin":"2017-03-31T18:00:00-03:00"}}'   
+       
+  end
+  
+  
   
 end
