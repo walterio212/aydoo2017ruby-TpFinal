@@ -58,6 +58,18 @@ class Persistor
     end
   end
 
+  def listar_todos_los_calendarios()
+    path = @almacenamientoCalendario + "/*.txt"
+    result = []
+    @dir.glob(path) do |archivoCalendario|
+      @file.open(archivoCalendario) { |f| result << f.readline }
+    end
+    
+    result
+  end
+
+  private 
+
   def inicializar_directorio()
       if(!existe_el_directorio?())
         @dir.mkdir(@almacenamientoCalendario)

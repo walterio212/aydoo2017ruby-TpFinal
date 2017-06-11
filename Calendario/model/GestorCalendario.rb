@@ -1,3 +1,4 @@
+require 'json'
 require_relative '../model/GeneralError'
 require_relative '../model/calendario'
 require_relative '../model/convertidor_json_objeto'
@@ -23,5 +24,8 @@ class GestorCalendario
     @persistor.borrar_calendario(nombreCalendario)
   end
 
-
+  def listarTodosLosCalendarios()
+    calendarios = @persistor.listar_todos_los_calendarios()
+    JSON.dump(calendarios)
+  end
 end

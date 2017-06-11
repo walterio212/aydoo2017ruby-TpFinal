@@ -48,11 +48,11 @@
   get '/calendarios' do
     content_type :json
     
-    convertidor = ConvertidorObjetoJson.new()
+    gestor = GestorCalendario.new()
   
-    calendarios = [Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new("calendario4"),Calendario.new("calendario5")]
+    calendarios = gestor.listarTodosLosCalendarios()
     
-    response.body = JSON.dump(convertidor.convertir_calendarios(calendarios))
+    response.body = calendarios
   
   end
 
