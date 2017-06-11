@@ -2,13 +2,15 @@ require 'json'
 require_relative '../model/calendario'
 require_relative '../model/GeneralError'
 require_relative '../model/convertidor_objeto_json'
+require_relative '../model/convertidor_json_objeto'
 
 class Persistor 
 
-  def initialize(fileClass, dirClass, convertidorObjetoJson = ConvertidorObjetoJson.new())
+  def initialize(fileClass, dirClass, convertidorObjetoJson = ConvertidorObjetoJson.new(), convertidorJsonObjeto = ConvertidorJsonObjeto.new())
     @file = fileClass
     @dir = dirClass
     @convertidorObjetoJson = convertidorObjetoJson
+    @convertidorJsonObjeto = convertidorJsonObjeto
     @almacenamientoCalendario = "almacenamientoCalendario"
     inicializar_directorio()
   end 
@@ -62,7 +64,7 @@ class Persistor
     path = @almacenamientoCalendario + "/*.txt"
     result = []
     @dir.glob(path) do |archivoCalendario|
-      @file.open(archivoCalendario) { |f| result << f.readline }
+      @file.open(archivoCalendario) { |f| result << @convertidorJsonObjeto.convertir_calendario_no_array(f.readline) }
     end
     
     result
