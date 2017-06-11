@@ -6,6 +6,7 @@ require_relative '../model/convertidor_objeto_json'
 require_relative '../model/validador_calendario'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
+require_relative '../model/calendario_inexistente_error'
 require_relative '../model/persistor'
 require_relative '../model/web_response'
 
@@ -41,7 +42,17 @@ class GestorCalendario
   end
 
   def obtenerCalendario(nombreCalendario)
-    calendario = @persistor.obtener_calendario(nombreCalendario)
+    webResponse = WebResponse.new("", 200, "")
+    begin
+      @validadorCalendario.validar_calendario_existente(nombreCalendario)
+      calendario = @persistor.obtener_calendario(nombreCalendario)
+      webResponse.setRespuesta(calendario)
+    rescue CalendarioInexistenteError => e 
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    end
+
+    webResponse
   end
 
   def borrarCalendario(nombreCalendario)

@@ -3,6 +3,7 @@ require_relative '../model/calendario'
 require_relative '../model/GestorCalendario'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
+require_relative '../model/calendario_inexistente_error'
 
 describe 'GestorCalendario' do
   it 'Borrar Calendario invoca al persistor a borrar calendario' do
@@ -19,14 +20,14 @@ describe 'GestorCalendario' do
   it 'Obtener CAlendario invoca al persistor a obtener_calendario' do
     persistorDouble = double('Persistor', :obtener_calendario => "{ 'nombre' : 'calendario1' }") 
     convertidorJsonObjetoDouble = double('ConvertidorJsonObjeto')
-    validador = double("Validador")
+    validador = double("Validador", :validar_calendario_existente => "ok")
     convertidorObjetoJsonDouble = double("convertidorObjetoJsonDouble")
 
     expect(persistorDouble).to receive(:obtener_calendario).with("calendario1")
     gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador)
-    calendario = gestor.obtenerCalendario("calendario1")
+    rta = gestor.obtenerCalendario("calendario1")
 
-    expect(calendario).to eq "{ 'nombre' : 'calendario1' }"
+    expect(rta.getRespuesta()).to eq "{ 'nombre' : 'calendario1' }"
   end
 
   it 'Crear calendario invoca al conversor y al persistor para crearlo' do
@@ -76,5 +77,21 @@ describe 'GestorCalendario' do
 
     expect(response.getEstado()).to eq 400
     expect(response.getRespuesta()).to eq "El calendario ingresado posee el nombre vacio"
+  end
+
+  it 'Obtener CAlendario inexistente error' do
+    persistorDouble = double('Persistor', :obtener_calendario => "{ 'nombre' : 'calendario1' }") 
+    convertidorJsonObjetoDouble = double('ConvertidorJsonObjeto')
+    validador = double("Validador")
+    convertidorObjetoJsonDouble = double("convertidorObjetoJsonDouble")
+
+    allow(validador).to receive(:validar_calendario_existente).and_raise(CalendarioInexistenteError)
+
+    expect(persistorDouble).not_to receive(:obtener_calendario).with("calendario1")
+    gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador)
+    rta = gestor.obtenerCalendario("calendario1")
+
+    expect(rta.getEstado()).to eq 404
+    expect(rta.getRespuesta()).to eq "El nombre de calendario ingresado no existe"
   end
 end
