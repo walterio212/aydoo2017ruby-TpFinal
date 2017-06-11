@@ -5,32 +5,34 @@ require_relative '../model/convertidor_objeto_json'
 
 class Persistor 
 
-  def initialize(fileClass, dirClass)
+  def initialize(fileClass, dirClass, convertidorObjetoJson = ConvertidorObjetoJson.new())
     @file = fileClass
     @dir = dirClass
+    @convertidorObjetoJson = convertidorObjetoJson
     @almacenamientoCalendario = "almacenamientoCalendario"
-    inicializarDirectorio()
+    inicializar_directorio()
   end 
 
-  def crearCalendario(calendario)
+  def crear_calendario(calendario)
     nombreCalendario = calendario.getNombre()
-    fullName = obtenerFullName(nombreCalendario)
-    if(!existeElArchivo?(fullName))      
+    fullName = obtener_fullname(nombreCalendario)
+    if(!existe_el_archivo?(fullName))      
       archivo = @file.new(fullName, "w")
-      archivo.puts(calendario.to_json)
+      json = @convertidorObjetoJson.convertir_calendario(calendario)
+      archivo.puts(json)
       archivo.close
     else 
       raise GeneralError.new("Ya existe un calendario con el nombre ingresado")
     end
   end
 
-  def obtenerCalendario(nombreCalendario)
+  def obtener_calendario(nombreCalendario)
     calendario = nil
     calendarioJson = nil
     lineaJson = nil
-    fullName = obtenerFullName(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
 
-    if(existeElArchivo?(fullName))
+    if(existe_el_archivo?(fullName))
       
       archivo = @file.open(fullName, "r") do |f| 
         f.each_line do |linea|
@@ -46,31 +48,31 @@ class Persistor
     lineaJson
   end
 
-  def borrarCalendario(nombreCalendario)
-    fullName = obtenerFullName(nombreCalendario)
+  def borrar_calendario(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
 
-    if(existeElArchivo?(fullName))
+    if(existe_el_archivo?(fullName))
       @file.delete(fullName)      
     else 
       raise GeneralError.new("No existe un calendario con el nombre ingresado: " + nombreCalendario)
     end
   end
 
-  def inicializarDirectorio()
-      if(!existeElDirectorio?())
+  def inicializar_directorio()
+      if(!existe_el_directorio?())
         @dir.mkdir(@almacenamientoCalendario)
       end
   end
 
-  def existeElDirectorio?()
+  def existe_el_directorio?()
     @file.directory?(@almacenamientoCalendario)
   end
 
-  def existeElArchivo?(nombre)
+  def existe_el_archivo?(nombre)
     @file.file?(nombre)
   end
 
-  def obtenerFullName(nombreCalendario)
+  def obtener_fullname(nombreCalendario)
     nombreArchivo = nombreCalendario + ".txt"
     @file.join(@almacenamientoCalendario, nombreArchivo)
   end

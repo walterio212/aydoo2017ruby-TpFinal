@@ -1,6 +1,6 @@
 require 'rspec' 
 require_relative '../model/calendario'
-require_relative '../model/Persistor'
+require_relative '../model/persistor'
 require_relative '../model/GeneralError'
 
 describe 'Persistor' do 
@@ -34,7 +34,7 @@ describe 'Persistor' do
     fileDouble.should_receive(:new).with("almacenamientoCalendario/calendario 1.txt", "w").exactly(1).times
     persistidor = Persistor.new(fileDouble, dirDouble)
 
-    res = persistidor.crearCalendario(calendario)
+    res = persistidor.crear_calendario(calendario)
     expect(res).to eq "archivo Cerrado"
   end
 
@@ -47,7 +47,7 @@ describe 'Persistor' do
 
     persistidor = Persistor.new(fileDouble, dirDouble)
 
-    expect{ persistidor.crearCalendario(calendario) }.
+    expect{ persistidor.crear_calendario(calendario) }.
       to raise_error(GeneralError, "Ya existe un calendario con el nombre ingresado")
     
   end
@@ -61,7 +61,7 @@ describe 'Persistor' do
 
     persistidor = Persistor.new(fileDouble, dirDouble)
 
-    expect{ persistidor.obtenerCalendario("calendario") }.
+    expect{ persistidor.obtener_calendario("calendario") }.
       to raise_error(GeneralError, "No existe un calendario con el nombre ingresado: calendario")    
   end
 
@@ -73,7 +73,7 @@ describe 'Persistor' do
 
     persistidor = Persistor.new(fileDouble, dirDouble)
 
-    expect{ persistidor.borrarCalendario("calendario") }.
+    expect{ persistidor.borrar_calendario("calendario") }.
       to raise_error(GeneralError, "No existe un calendario con el nombre ingresado: calendario")    
   end
 
@@ -87,6 +87,6 @@ describe 'Persistor' do
 
     persistidor = Persistor.new(fileDouble, dirDouble)
 
-    persistidor.borrarCalendario("calendario")
+    persistidor.borrar_calendario("calendario")
   end
 end
