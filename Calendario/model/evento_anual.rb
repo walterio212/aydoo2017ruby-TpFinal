@@ -1,6 +1,6 @@
 require 'date'
 
-class EventoSemanal < Evento
+class EventoAnual < Evento
 
   def periodo_dentro_de_Evento?(fechainicio, fechafin)
     if(fecha_ocupada?(fechainicio) || fecha_ocupada?(fechafin))

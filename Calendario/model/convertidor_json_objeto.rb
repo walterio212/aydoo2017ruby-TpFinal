@@ -2,6 +2,7 @@ require 'json'  #Libreria para parseo de JSON
 require 'date'  #necesario para el parseo de fechas
 require_relative 'calendario'
 require_relative 'evento'
+require_relative 'evento_builder'
 require_relative 'recurrencia'
 
 class ConvertidorJsonObjeto
@@ -15,7 +16,7 @@ class ConvertidorJsonObjeto
     end
   
     json = hacer_json_valido(json)
-    
+
     respuesta = []
   
     json_parseado = JSON.parse(json);
@@ -50,15 +51,9 @@ class ConvertidorJsonObjeto
 
     evento_json = JSON.parse(json);
 
-    recurrencia = crear_recurrencia(evento_json["recurrencia"])
-
-    inicio = evento_json["inicio"]
-    fin = evento_json["fin"]
-
-    fecha_inicio = DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
-    fecha_fin = DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
-
-    respuesta = Evento.new(evento_json["calendario"],evento_json["id"],evento_json["nombre"],fecha_inicio,fecha_fin,recurrencia)
+    #Aca deberia crear el builder de eventos
+    builder = EventoBuilder.new()
+    respuesta = builder.crear(evento_json)
 
     return respuesta
 
@@ -131,20 +126,10 @@ class ConvertidorJsonObjeto
     if (json.chars.first =='{' && json.chars.last=='}')
       json.insert(0,"[")
       json.append("]")
-    end 
+    end
       
     return json
 
   end
-
-  
-  def crear_recurrencia(json)
-    
-    #chequear que la frecuencia sea una frecuencia valida
-    
-    Recurrencia.new(json["frecuencia"],DateTime.parse(json["fin"]).to_date)
-
-  end
-
   
 end

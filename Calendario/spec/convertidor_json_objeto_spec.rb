@@ -71,7 +71,7 @@ describe 'ConvertidorJsonObjeto' do
         "inicio" : "2017-03-31T18:00:00-03:00",
         "fin" : "2017-03-31T18:00:00-03:00",
         "recurrencia" : {
-            "frecuencia" : "semanal",
+            "frecuencia" : "mensual",
             "fin" : "2017-03-31T18:00:00-03:00"
         }
     }').getNombre).to eq "fiesta"
@@ -88,12 +88,13 @@ describe 'ConvertidorJsonObjeto' do
         "inicio" : "2017-03-31T18:00:00-03:00",
         "fin" : "2017-03-31T18:00:00-03:00",
         "recurrencia" : {
-            "frecuencia" : "semanal",
+            "frecuencia" : "anual",
             "fin" : "2017-03-31T18:00:00-03:00"
         }
-    }').getRecurrencia.getFrecuencia).to eq "semanal"
+    }').getRecurrencia.getFrecuencia).to eq "anual"
 
 
+    
 
   end
 

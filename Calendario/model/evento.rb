@@ -4,7 +4,7 @@ class Evento
 
   def initialize(calendario,id,nombre,inicio,fin,recurrencia)
     @calendario = calendario
-    @id = id 
+    @id = id
     @nombre = nombre
     @inicio = inicio
     @fin = fin
