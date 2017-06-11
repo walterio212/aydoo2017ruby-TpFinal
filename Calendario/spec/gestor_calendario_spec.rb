@@ -123,4 +123,27 @@ describe 'GestorCalendario' do
         }
     }')
   end
+
+  it 'listar eventos de calendario' do
+    evento = Evento.new("Calendario1",
+                        "testEvento",
+                        "fiesta",
+                        DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+                        DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+                        Recurrencia.new('semanal',
+                                        DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))
+    
+    convertidorJsonObjetoDouble = double("convertidorJsonObjetoDouble")
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [evento]) 
+    validador = double('VAlidador')
+    convertidorObjetoJsonDouble = double('ConvertidorObjetoJson', :convertir_eventos => [evento])
+    jsondouble = double('JSON', :dump => "convertido")
+
+    expect(persistorDouble).to receive(:listar_eventos_por_calendario).with("Calendario1")
+    expect(jsondouble).to receive(:dump).with([evento])
+    gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador, jsondouble)
+    rta = gestor.listarEventosPorCalendario('Calendario1')
+
+    expect(rta).to eq "convertido"
+  end
 end

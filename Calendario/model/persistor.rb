@@ -84,6 +84,22 @@ class Persistor
     end  
   end
 
+  def listar_eventos_por_calendario(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
+    eventosArray = []
+    @file.foreach(fullName).with_index do |line, line_num|
+      if(line_num != 0)
+
+        puts line
+        evt = @convertidorJsonObjeto.convertir_evento_no_array(line)
+        evt.getCalendario()
+        eventosArray << evt
+      end
+    end
+
+    eventosArray
+  end
+
   private 
 
   def inicializar_directorio()
@@ -97,11 +113,11 @@ class Persistor
   end
 
   def existe_el_archivo?(nombre)
-    @file.file?(nombre)
+    @file.file?(nombre.downcase)
   end
 
   def obtener_fullname(nombreCalendario)
-    nombreArchivo = nombreCalendario + ".txt"
+    nombreArchivo = nombreCalendario.downcase + ".txt"
     @file.join(@almacenamientoCalendario, nombreArchivo)
   end
 end

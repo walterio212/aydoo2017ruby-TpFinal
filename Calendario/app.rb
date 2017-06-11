@@ -124,6 +124,17 @@
   delete '/eventos/id' do
   
   end
+
+  
+  #-------------------------------------
+  # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
+  #------------------------------------- 
+  # 
+  get '/eventos' do    
+    content_type :json
+    gestor = GestorCalendario.new()
+    gestor.listarEventosPorCalendario(params[:calendario]) 
+  end
   
   #-------------------------------------
   # DEVUELVE LOS EVENTOS
@@ -160,14 +171,7 @@
     
   
   end
-  
-  #-------------------------------------
-  # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
-  #------------------------------------- 
-  # 
-  get '/eventos?calendario=calendario1' do
-  
-  end
+
   
   #-------------------------------------
   # DEVUELVE EVENTO POR ID
