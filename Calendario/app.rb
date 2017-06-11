@@ -2,13 +2,15 @@
   require 'rubygems'
   require 'json'  #Libreria para parseo de JSON
   require_relative './model/GestorCalendario'
+  require_relative './model/web_response'
   
   #Testear json posteado -> curl -H "Content-Type: application/json" -X POST -d '[{"nombre": "calendario1"},{"nombre": "calendario2"}]'  http://localhost:4567/calendarios
   #Obtener parametros post ->     numero_obtenido = "#{params['x']}"
  
   #-------------------------------------
   # CREA UN CALENDARIO
-  #------------------------------------- 
+  #-------------------------------------
+  # LISTO
   #   {
   #    "nombre":"calendario1" 
   #   } 
@@ -22,7 +24,8 @@
   #-------------------------------------
   # BORRA UN CALENDARIO
   #------------------------------------- 
-  # 
+  #
+  # LISTO
   #DELETE /calendarios/calendario1
   #status=200
   #status=404 (no encontrado)
@@ -35,7 +38,8 @@
   #-------------------------------------
   # DEVUELVE TODOS LOS CALENDARIOS
   #------------------------------------- 
-  # 
+  #
+  # FALTA
   #[
   #  {
   #    "nombre":"calendario1"
@@ -53,7 +57,6 @@
     calendarios = gestor.listarTodosLosCalendarios()
     
     response.body = calendarios
-  
   end
 
   #-------------------------------------

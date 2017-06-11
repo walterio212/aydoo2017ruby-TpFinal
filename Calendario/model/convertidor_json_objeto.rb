@@ -26,9 +26,47 @@ class ConvertidorJsonObjeto
   
   end
   
-  def convertir_evento(json)
+  def convertir_calendario_no_array(json)
     
     respuesta = nil;
+    
+    if json.nil? 
+      return respuesta
+    end
+   
+    json_parseado = JSON.parse(json);
+   
+    return Calendario.new(json_parseado["nombre"])
+  
+  end
+
+  def convertir_evento_no_array(json)
+
+    respuesta = nil
+
+    if json.nil? || json.empty? || ! es_json?(json)
+      return respuesta
+    end
+
+    evento_json = JSON.parse(json);
+
+    recurrencia = crear_recurrencia(evento_json["recurrencia"])
+
+    inicio = evento_json["inicio"]
+    fin = evento_json["fin"]
+
+    fecha_inicio = DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
+    fecha_fin = DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
+
+    respuesta = Evento.new(evento_json["calendario"],evento_json["id"],evento_json["nombre"],fecha_inicio,fecha_fin,recurrencia)
+
+    return respuesta
+
+  end
+  
+  def convertir_evento(json)
+    
+    respuesta = nil
     
     if json.nil? || json.empty? || ! es_json?(json)
       return respuesta
@@ -41,16 +79,19 @@ class ConvertidorJsonObjeto
     json_parseado = JSON.parse(json);
     
     json_parseado.each { |evento_json|
-      
-      
-      #TODO chequear errores como si existe el calendario etc
-    
-      #convierto la recurrencia en objeto y parseo las fechas (falta parsear bien las fechas, falla)
-      recurrencia = crear_recurrencia(evento_json["recurrencia"])
-      #fecha_inicio = json["inicio"].to_date.strftime("%d/%m/%Y")
-      #fecha_fin = json["fin"].to_date.strftime("%d/%m/%Y") 
-      
-      respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],Date.new,Date.new,recurrencia) }
+
+    recurrencia = crear_recurrencia(evento_json["recurrencia"])
+
+    inicio = json[0]["inicio"]
+    fin = json[0]["fin"]
+
+    puts inicio
+    puts fin
+
+    fecha_inicio = DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
+    fecha_fin = DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
+        
+    respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],"Date.new()","Date.new()",recurrencia) }
     
     return respuesta
   
