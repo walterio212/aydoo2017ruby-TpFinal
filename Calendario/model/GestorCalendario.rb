@@ -55,6 +55,14 @@ class GestorCalendario
     webResponse
   end
 
+  def crearEvento(jsonEvento)
+    webResponse = WebResponse.new("", 200, "")
+    evento = @conversorJsonObjeto.convertir_evento_no_array(jsonEvento)
+    @persistor.crear_evento(evento)
+
+    webResponse
+  end
+
   def borrarCalendario(nombreCalendario)
     @persistor.borrar_calendario(nombreCalendario)
   end

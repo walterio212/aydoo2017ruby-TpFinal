@@ -41,7 +41,7 @@ describe 'ConvertidorObjetoJson' do
   
   it 'TestMetodoConvertirEvento:AlRecibirUnEventoDeberiaDevolverSuJson' do
         
-    evento = Evento.new(Calendario.new("Calendario1"),
+    evento = Evento.new("Calendario1",
     "testEvento",
     "fiesta",
     DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
@@ -54,21 +54,21 @@ describe 'ConvertidorObjetoJson' do
   
    it 'TestMetodoConvertirEvento:AlRecibirUnEventoDeberiaDevolverSuJson' do
         
-    evento1 = Evento.new(Calendario.new("Calendario1"),
+    evento1 = Evento.new("Calendario1",
     "testEvento",
     "fiesta",
     DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
     DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
     Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
     
-     evento2 = Evento.new(Calendario.new("Calendario1"),
+     evento2 = Evento.new("Calendario1",
     "testEvento",
     "fiesta",
     DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
     DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
     Recurrencia.new('diario',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
     
-     evento3 = Evento.new(Calendario.new("Calendario1"),
+     evento3 = Evento.new("Calendario1",
     "testEvento",
     "fiesta",
     DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),

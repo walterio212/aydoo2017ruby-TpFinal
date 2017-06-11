@@ -5,7 +5,7 @@ require_relative '../model/recurrencia'
 
 describe 'evento' do
 
-  let(:evento) { Evento.new(Calendario.new("Calendario1"),
+  let(:evento) { Evento.new("Calendario1",
   "testEvento",
   "fiesta",
   DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),

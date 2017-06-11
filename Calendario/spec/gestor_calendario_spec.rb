@@ -94,4 +94,33 @@ describe 'GestorCalendario' do
     expect(rta.getEstado()).to eq 404
     expect(rta.getRespuesta()).to eq "El nombre de calendario ingresado no existe"
   end
+
+  it 'crear Evento llama al conversor y al persistor' do
+    evento = Evento.new("Calendario1",
+                        "testEvento",
+                        "fiesta",
+                        DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+                        DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
+                        Recurrencia.new('semanal',
+                                        DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))
+    
+    convertidorObjetoJsonDouble = double("convertidorObjetoJsonDouble")
+    persistorDouble = double('Persistor', :crear_evento => "creado") 
+    validador = double('VAlidador')
+    convertidorJsonObjetoDouble = double('ConvertidorJsonObjeto', :convertir_evento_no_array => evento)
+
+    expect(persistorDouble).to receive(:crear_evento).with(evento)
+    gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador)
+    gestor.crearEvento('{
+        "calendario" : "calendario1",
+        "id" : "testEvento",
+        "nombre" : "fiesta",
+        "inicio" : "2017-03-31T18:00:00-03:00",
+        "fin" : "2017-03-31T18:00:00-03:00",
+        "recurrencia" : {
+            "frecuencia" : "semanal",
+            "fin" : "2017-03-31T18:00:00-03:00"
+        }
+    }')
+  end
 end

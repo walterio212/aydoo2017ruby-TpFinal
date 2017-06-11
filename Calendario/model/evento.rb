@@ -37,7 +37,7 @@ class Evento
   end
 
   def to_json
-    {"calendario"=>@calendario.getNombre(),"id"=>@id,"nombre"=>@nombre,"inicio"=>@inicio,"fin"=>@fin,"recurrencia"=>@recurrencia.to_json}
+    {"calendario"=>@calendario,"id"=>@id,"nombre"=>@nombre,"inicio"=>@inicio,"fin"=>@fin,"recurrencia"=>@recurrencia.to_json}
   end
   
 end

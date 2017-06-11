@@ -96,7 +96,11 @@
   #status=201
   #status=400 (si hay un error de validación)
   post '/eventos' do
+    gestor = GestorCalendario.new()
+    respuesta = gestor.crearEvento(request.body.read)  
+    status respuesta.getEstado()
 
+    response.body = respuesta.getRespuesta()
   end
     
   #-------------------------------------
