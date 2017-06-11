@@ -24,8 +24,8 @@ class EventoMensual < Evento
         estaOcupada = true
       end
 
-      inicioUtc = (getInicio() + (7 * iteraciones)).to_time.utc
-      finUtc = (getFin() + (7 * iteraciones)).to_time.utc
+      inicioUtc = (getInicio() + (30 * iteraciones)).to_time.utc
+      finUtc = (getFin() + (30 * iteraciones)).to_time.utc
 
       iteraciones += 1
     end

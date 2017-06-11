@@ -94,7 +94,7 @@ describe 'ConvertidorJsonObjeto' do
     }').getRecurrencia.getFrecuencia).to eq "anual"
 
 
-    
+
 
   end
 

@@ -1,4 +1,4 @@
-require 'rspec' 
+require 'rspec'
 require_relative '../model/calendario'
 require_relative '../model/evento'
 require_relative '../model/recurrencia'

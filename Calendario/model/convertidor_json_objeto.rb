@@ -80,9 +80,6 @@ class ConvertidorJsonObjeto
     inicio = json[0]["inicio"]
     fin = json[0]["fin"]
 
-    puts inicio
-    puts fin
-
     fecha_inicio = DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
     fecha_fin = DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
         
@@ -100,7 +97,6 @@ class ConvertidorJsonObjeto
     end
     
     json_parseado = JSON.parse(json);
-    puts json_parseado
     respuesta = json_parseado["nombre"]
     
     return respuesta
