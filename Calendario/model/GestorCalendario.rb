@@ -4,7 +4,10 @@ require_relative '../model/calendario'
 require_relative '../model/convertidor_json_objeto'
 require_relative '../model/convertidor_objeto_json'
 require_relative '../model/validador_calendario'
+require_relative '../model/calendario_nombre_existente_error'
+require_relative '../model/calendario_sin_nombre_error'
 require_relative '../model/persistor'
+require_relative '../model/web_response'
 
 class GestorCalendario
 
@@ -21,9 +24,20 @@ class GestorCalendario
   end
 
   def crearCalendario(jsonCalendario)
-    calendario = @conversorJsonObjeto.convertir_calendario_no_array(jsonCalendario)
-    @validadorCalendario.validar_crear_calendario(calendario)
-    @persistor.crear_calendario(calendario)
+    webResponse = WebResponse.new("", 200, "")
+    begin
+      calendario = @conversorJsonObjeto.convertir_calendario_no_array(jsonCalendario)
+      @validadorCalendario.validar_crear_calendario(calendario)
+      @persistor.crear_calendario(calendario)
+    rescue CalendarioNombreExistenteError => e 
+      webResponse.setEstado(400)
+      webResponse.setRespuesta(e.message)
+    rescue CalendarioSinNombreError => e 
+      webResponse.setEstado(400)
+      webResponse.setRespuesta(e.message)
+    end
+
+    webResponse
   end
 
   def obtenerCalendario(nombreCalendario)

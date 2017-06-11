@@ -18,7 +18,10 @@
   #  status=400 (si el nombres esta duplicado o nombre vacio)
   post '/calendarios' do
     gestor = GestorCalendario.new()
-    gestor.crearCalendario(request.body.read)    
+    respuesta = gestor.crearCalendario(request.body.read)  
+    status respuesta.getEstado()
+    
+    response.body = respuesta.getRespuesta()
   end
 
   #-------------------------------------
