@@ -1,6 +1,7 @@
 require_relative '../model/persistor'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
+require_relative '../model/calendario_inexistente_error'
 
 class ValidadorCalendario 
 
@@ -12,6 +13,12 @@ class ValidadorCalendario
     nombre = calendario.getNombre()
     validar_nombre_no_vacio(nombre)
     validar_existencia(nombre)
+  end
+
+  def validar_calendario_existente(nombre)
+    if(!@persistor.existe_calendario?(nombre.downcase))
+      raise CalendarioInexistenteError.new()
+    end
   end
 
   private

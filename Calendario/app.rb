@@ -20,7 +20,7 @@
     gestor = GestorCalendario.new()
     respuesta = gestor.crearCalendario(request.body.read)  
     status respuesta.getEstado()
-    
+
     response.body = respuesta.getRespuesta()
   end
 
@@ -72,7 +72,10 @@
   #status = 404 (si no existe)
   get '/calendarios/:nombre' do
     gestor = GestorCalendario.new()
-    gestor.obtenerCalendario(params['nombre'])
+    respuesta = gestor.obtenerCalendario(params['nombre'])
+
+    status respuesta.getEstado()
+    response.body = respuesta.getRespuesta()
   end
     
   #-------------------------------------
