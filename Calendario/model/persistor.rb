@@ -2,13 +2,15 @@ require 'json'
 require_relative '../model/calendario'
 require_relative '../model/GeneralError'
 require_relative '../model/convertidor_objeto_json'
+require_relative '../model/convertidor_json_objeto'
 
 class Persistor 
 
-  def initialize(fileClass, dirClass, convertidorObjetoJson = ConvertidorObjetoJson.new())
+  def initialize(fileClass, dirClass, convertidorObjetoJson = ConvertidorObjetoJson.new(), convertidorJsonObjeto = ConvertidorJsonObjeto.new())
     @file = fileClass
     @dir = dirClass
     @convertidorObjetoJson = convertidorObjetoJson
+    @convertidorJsonObjeto = convertidorJsonObjeto
     @almacenamientoCalendario = "almacenamientoCalendario"
     inicializar_directorio()
   end 
@@ -57,6 +59,18 @@ class Persistor
       raise GeneralError.new("No existe un calendario con el nombre ingresado: " + nombreCalendario)
     end
   end
+
+  def listar_todos_los_calendarios()
+    path = @almacenamientoCalendario + "/*.txt"
+    result = []
+    @dir.glob(path) do |archivoCalendario|
+      @file.open(archivoCalendario) { |f| result << @convertidorJsonObjeto.convertir_calendario_no_array(f.readline) }
+    end
+    
+    result
+  end
+
+  private 
 
   def inicializar_directorio()
       if(!existe_el_directorio?())

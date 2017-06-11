@@ -50,20 +50,12 @@
   #]
   #status=200  
   get '/calendarios' do
-
-    gestor = GestorCalendario.new()
-    #supongamos que el gestor me devuelve estos calendarios
-    #gestor.crearCalendario(request.body.read)
-    calendarios = [Calendario.new("calendario1"),Calendario.new("calendario2"),Calendario.new("calendario3"),Calendario.new("calendario4"),Calendario.new("calendario5")]
-
-    #web_response = new WebResponse(json,'OK',200)
     content_type :json
-
-    convertidor = ConvertidorObjetoJson.new()
-
-    response.body = JSON.dump(convertidor.convertir_calendarios(calendarios))
-
-
+    
+    gestor = GestorCalendario.new()
+    calendarios = gestor.listarTodosLosCalendarios()
+    
+    response.body = calendarios
   end
 
   #-------------------------------------
