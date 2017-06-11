@@ -21,14 +21,14 @@ class ConvertidorObjetoJson
   
   def convertir_calendario(calendario)
 
-    if calendario.nil? 
+    if calendario.nil?
       return nil
     end
     
     return JSON.generate(calendario.to_json)  
   end
-  
-  
+
+
   def convertir_evento(evento)
 
     if evento.nil? 
@@ -55,6 +55,5 @@ class ConvertidorObjetoJson
     
     return array_json 
   end
-  
-  
+
 end
