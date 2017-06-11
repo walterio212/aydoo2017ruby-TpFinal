@@ -6,7 +6,7 @@ require_relative '../model/convertidor_json_objeto'
 
 class Persistor 
 
-  def initialize(fileClass, dirClass, convertidorObjetoJson = ConvertidorObjetoJson.new(), convertidorJsonObjeto = ConvertidorJsonObjeto.new())
+  def initialize(fileClass = File, dirClass = Dir, convertidorObjetoJson = ConvertidorObjetoJson.new(), convertidorJsonObjeto = ConvertidorJsonObjeto.new())
     @file = fileClass
     @dir = dirClass
     @convertidorObjetoJson = convertidorObjetoJson
@@ -68,6 +68,11 @@ class Persistor
     end
     
     result
+  end
+
+  def existe_calendario?(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
+    existe_el_archivo?(fullName)
   end
 
   private 
