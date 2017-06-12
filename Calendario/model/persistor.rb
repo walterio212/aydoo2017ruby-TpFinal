@@ -122,6 +122,24 @@ class Persistor
     eventosArray
   end
 
+  def borrar_evento(idEvento)
+    evento = obtener_evento_por_id(idEvento)
+    nombreCalendario = evento.getCalendario()
+
+    eventosCalendario = listar_eventos_por_calendario(evento.getCalendario())
+    evento = eventosCalendario.find { |eventoCalendario| eventoCalendario.getId() == idEvento }
+
+    eventosCalendario.delete(evento)
+
+    calendario = obtener_calendario_sin_eventos(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
+    archivo = @file.new(fullName, "w")
+    jsonCalendario = @convertidorObjetoJson.convertir_calendario(calendario)
+    archivo.puts(jsonCalendario)
+    eventosCalendario.each {|x| archivo.puts(@convertidorObjetoJson.convertir_evento(x))}
+    archivo.close
+  end
+
   private 
 
   def inicializar_directorio()
@@ -141,5 +159,12 @@ class Persistor
   def obtener_fullname(nombreCalendario)
     nombreArchivo = nombreCalendario.downcase + ".txt"
     @file.join(@almacenamientoCalendario, nombreArchivo)
+  end
+
+  def obtener_calendario_sin_eventos(nombreCalendario)
+    archivoCalendario = obtener_fullname(nombreCalendario)
+    calendario = nil
+    @file.open(archivoCalendario) { |f| calendario = @convertidorJsonObjeto.convertir_calendario_no_array(f.readline)}
+    calendario
   end
 end
