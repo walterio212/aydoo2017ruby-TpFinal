@@ -124,7 +124,20 @@
   delete '/eventos/id' do
   
   end
-  
+
+
+  #-------------------------------------
+  # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
+  #-------------------------------------
+  #
+  get '/eventos?calendario=calendario1' do
+
+    calendario = params['calendario1']
+
+    puts calendario #aca hace lo que quiera
+
+  end
+
   #-------------------------------------
   # DEVUELVE LOS EVENTOS
   #------------------------------------- 
@@ -158,14 +171,6 @@
     
     convertidor.convertir_eventos(array_eventos);
     
-  
-  end
-  
-  #-------------------------------------
-  # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
-  #------------------------------------- 
-  # 
-  get '/eventos?calendario=calendario1' do
   
   end
   
