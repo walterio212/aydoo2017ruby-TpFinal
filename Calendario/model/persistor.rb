@@ -1,5 +1,6 @@
 require 'json'
 require_relative '../model/calendario'
+require_relative '../model/calendario_eventos'
 require_relative '../model/GeneralError'
 require_relative '../model/convertidor_objeto_json'
 require_relative '../model/convertidor_json_objeto'
@@ -30,26 +31,13 @@ class Persistor
     end
   end
 
-  def obtener_calendario(nombreCalendario)
-    calendario = nil
-    calendarioJson = nil
-    lineaJson = nil
-    fullName = obtener_fullname(nombreCalendario)
+  def obtener_calendario_eventos(nombreCalendario)
+    calendario = obtener_calendario_por_nombre(nombreCalendario)
+    eventos = listar_eventos_por_calendario(nombreCalendario)
 
-    if(existe_el_archivo?(fullName))
-      
-      archivo = @file.open(fullName, "r") do |f| 
-        f.each_line do |linea|
-          lineaJson = linea
-          calendarioJson = JSON.parse(linea)
-          calendario = Calendario.new(calendarioJson["nombre"])
-        end
-      end      
-    else 
-      raise GeneralError.new("No existe un calendario con el nombre ingresado: " + nombreCalendario)
-    end
+    calendarioEventos = CalendarioEventos.new(calendario, eventos)
 
-    lineaJson
+    calendarioEventos
   end
 
   def borrar_calendario(nombreCalendario)
@@ -155,6 +143,16 @@ class Persistor
     end
     
     recrear_archivo(nombreCalendario, eventosCalendario)
+  end
+
+  def obtener_calendario_por_nombre(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
+    
+    result = nil
+
+    @file.open(fullName) { |f| result = @convertidorJsonObjeto.convertir_calendario_no_array(f.readline) }
+    
+    result
   end
 
   private 

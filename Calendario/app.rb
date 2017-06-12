@@ -71,6 +71,7 @@
   #status = 200
   #status = 404 (si no existe)
   get '/calendarios/:nombre' do
+    content_type :json
     gestor = GestorCalendario.new()
     respuesta = gestor.obtenerCalendario(params['nombre'])
 

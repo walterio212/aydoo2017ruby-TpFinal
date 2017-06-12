@@ -1,4 +1,5 @@
 require 'rspec' 
+require 'json'
 require_relative '../model/calendario'
 require_relative '../model/GestorCalendario'
 require_relative '../model/calendario_nombre_existente_error'
@@ -18,16 +19,16 @@ describe 'GestorCalendario' do
   end
 
   it 'Obtener CAlendario invoca al persistor a obtener_calendario' do
-    persistorDouble = double('Persistor', :obtener_calendario => "{ 'nombre' : 'calendario1' }") 
+    persistorDouble = double('Persistor', :obtener_calendario_eventos => "{ 'nombre' : 'calendario1' }") 
     convertidorJsonObjetoDouble = double('ConvertidorJsonObjeto')
     validador = double("Validador", :validar_calendario_existente => "ok")
     convertidorObjetoJsonDouble = double("convertidorObjetoJsonDouble")
 
-    expect(persistorDouble).to receive(:obtener_calendario).with("calendario1")
+    expect(persistorDouble).to receive(:obtener_calendario_eventos).with("calendario1")
     gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador)
     rta = gestor.obtenerCalendario("calendario1")
 
-    expect(rta.getRespuesta()).to eq "{ 'nombre' : 'calendario1' }"
+    expect(rta.getRespuesta()).to eq "\"\\\"{ 'nombre' : 'calendario1' }\\\"\""
   end
 
   it 'Crear calendario invoca al conversor y al persistor para crearlo' do

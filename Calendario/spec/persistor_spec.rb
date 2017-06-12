@@ -52,19 +52,6 @@ describe 'Persistor' do
     
   end
 
-  it 'Obtener Calendario inexistente lanza GeneralError' do
-    fileDouble = double('File', :directory? => true, :file? => false)
-    dirDouble = double('Dir')
-
-    calendario = Calendario.new("calendario 1")
-    allow(fileDouble).to receive(:join).with("almacenamientoCalendario", "calendario.txt") {"almacenamientoCalendario/calendario.txt"} 
-
-    persistidor = Persistor.new(fileDouble, dirDouble)
-
-    expect{ persistidor.obtener_calendario("calendario") }.
-      to raise_error(GeneralError, "No existe un calendario con el nombre ingresado: calendario")    
-  end
-
   it 'Borrar Calendario inexistente lanza GeneralError' do
     fileDouble = double('File', :directory? => true, :file? => false)
     dirDouble = double('Dir')

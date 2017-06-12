@@ -47,8 +47,9 @@ class GestorCalendario
     webResponse = WebResponse.new("", 200, "")
     begin
       @validadorCalendario.validar_calendario_existente(nombreCalendario)
-      calendario = @persistor.obtener_calendario(nombreCalendario)
-      webResponse.setRespuesta(calendario)
+      calendario = @persistor.obtener_calendario_eventos(nombreCalendario)
+      jsonCalendarioEventos = @json.dump(calendario.to_json())
+      webResponse.setRespuesta(jsonCalendarioEventos)
     rescue CalendarioInexistenteError => e 
       webResponse.setEstado(404)
       webResponse.setRespuesta(e.message)
