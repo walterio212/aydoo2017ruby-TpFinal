@@ -78,4 +78,14 @@ class GestorCalendario
     eventos = @persistor.listar_eventos_por_calendario(nombreCalendario)
     @json.dump(@conversorObjetoJson.convertir_eventos(eventos))
   end
+
+  def listarTodosLosEventos()
+    eventos = @persistor.listar_todos_los_eventos()
+    @json.dump(@conversorObjetoJson.convertir_eventos(eventos))
+  end
+
+  def obtenerEventoPorId(idEvento)
+    evento = @persistor.obtener_evento_por_id(idEvento)
+    @json.dump(@conversorObjetoJson.convertir_evento(evento))
+  end
 end
