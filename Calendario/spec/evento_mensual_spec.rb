@@ -30,12 +30,13 @@ describe 'EventoSemanal Tests' do
     expect(fecha_ocupada).to eq  true
   end
 
-
   it 'periodo_dentro_de_evento? deberia devolver true' do
-    fecha_ocupada =  evento.periodo_dentro_de_Evento?(DateTime.strptime("2017-08-06T19:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-08-06T21:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))
+    fecha_ocupada =  evento.periodo_dentro_de_Evento?(DateTime.strptime("2017-08-07T19:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-08-07T21:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))
 
     expect(fecha_ocupada).to eq  true
   end
+
+
 
 
   #it 'periodo_dentro_de_evento? deberia devolver true' do
