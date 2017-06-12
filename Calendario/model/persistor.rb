@@ -144,9 +144,14 @@ class Persistor
     eventosCalendario = listar_eventos_por_calendario(evento.getCalendario())
     evento = eventosCalendario.find { |eventoCalendario| eventoCalendario.getId() == idEvento }
 
-    evento.setInicio(actualizadorEvento.getInicio())
-    evento.setFin(actualizadorEvento.getFin())
-
+    if(!actualizadorEvento.getInicio().nil?)
+      evento.setInicio(actualizadorEvento.getInicio())  
+    end
+    
+    if(!actualizadorEvento.getFin().nil?)
+      evento.setFin(actualizadorEvento.getFin())
+    end
+    
     recrear_archivo(nombreCalendario, eventosCalendario)
   end
 
