@@ -24,12 +24,23 @@ class EventoMensual < Evento
         estaOcupada = true
       end
 
-      inicioUtc = (getInicio() + (30 * iteraciones)).to_time.utc
-      finUtc = (getFin() + (30 * iteraciones)).to_time.utc
+      inicioUtc = (getInicio() + (dias_del_mes(getInicio().year,getInicio().month) * iteraciones)).to_time.utc
+      finUtc = (getFin() + (dias_del_mes(getFin().year,getFin().month) * iteraciones)).to_time.utc
 
       iteraciones += 1
     end
 
     estaOcupada
+  end
+
+  def dias_del_mes(anio,mes)
+    case mes
+      when 4,5,9,11
+        30
+      when 2
+        (anio%4==0) ? 29 : 28
+      else
+        31
+    end
   end
 end
