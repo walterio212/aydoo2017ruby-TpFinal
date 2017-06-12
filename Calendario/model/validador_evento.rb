@@ -59,7 +59,7 @@ class ValidadorEvento
 
     if(! arrayEventos.empty?)
       arrayEventos.each do |evento|
-        if(evento.getNombre()) == nombreEvento)
+        if evento.getNombre() == nombreEvento
           raise EventoYaExistenteEnCalendarioError.new()
         end
       end
@@ -68,18 +68,29 @@ class ValidadorEvento
 
   def validar_coherencia_fechas(evento)
 
-    fechaInicio = evento.getInicio()
-    fechaFin = evento.getFin()
+    fechaInicio = evento.getInicio().to_time.utc
+    fechaFin = evento.getFin().to_time.utc
+
+    #chequeo que la fecha de fin no sea menor o igual a la de inicio
+    if(fechaFin<=fechaInicio)
+      raise EventoFechasIncoherentesError.new()
+    end
+
+    #chequeo que la diferencia entre la fecha final y la inicial no sea mayor a 72 horas
+    if (fechaFin - fechaInicio).to_i > 3 #dias
+      raise EventoDuracionMaximaInvalidaError.new()
+    end
+
+    #chequeo que no se superponga con ningun otro evento
 
     arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
 
-    if(! arrayEventos.empty?)
       arrayEventos.each do |evento|
-        if(evento.getId() == id)
+        if(evento.periodo_dentro_de_Evento?)
           raise EventoYaExistenteEnCalendarioError.new()
         end
       end
-    end
+
   end
 
 end

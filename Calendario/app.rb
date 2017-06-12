@@ -10,6 +10,7 @@
   #-------------------------------------
   # CREA UN CALENDARIO
   #-------------------------------------
+  # LISTO
   #   {
   #    "nombre":"calendario1" 
   #   } 
@@ -27,6 +28,7 @@
   # BORRA UN CALENDARIO
   #------------------------------------- 
   #
+  # LISTO
   #DELETE /calendarios/calendario1
   #status=200
   #status=404 (no encontrado)
@@ -39,6 +41,8 @@
   #-------------------------------------
   # DEVUELVE TODOS LOS CALENDARIOS
   #------------------------------------- 
+  #
+  # FALTA
   #[
   #  {
   #    "nombre":"calendario1"
