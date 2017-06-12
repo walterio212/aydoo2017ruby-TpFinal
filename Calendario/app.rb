@@ -121,15 +121,30 @@
   
   end
 
+  
+  #-------------------------------------
+  # DEVUELVE TODOS LOS EVENTOS
+  #-------------------------------------
+  #
+  get '/eventos' do
+
+    content_type :json
+
+    gestor = GestorCalendario.new()
+    response.body = gestor.listarTodosLosEventos()
+
+  end
+
   #-------------------------------------
   # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
   #-------------------------------------
   #
-  get '/eventos?calendario=calendario1' do
+  get '/eventos' do
 
-    calendario = params['calendario1']
+    content_type :json
 
-    puts calendario #aca hace lo que quiera
+    gestor = GestorCalendario.new()
+    response.body = gestor.listarEventosPorCalendario(params['calendario'])
 
   end
 
@@ -138,6 +153,11 @@
   #------------------------------------- 
   # 
   
-  get '/eventos/id' do
-  
+  get '/eventos/:id' do
+    content_type :json
+    
+    gestor = GestorCalendario.new()
+    evento = gestor.obtenerEventoPorId(params['id'])
+    
+    response.body = evento
   end

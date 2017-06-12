@@ -89,11 +89,33 @@ class Persistor
     eventosArray = []
     @file.foreach(fullName).with_index do |line, line_num|
       if(line_num != 0)
-
-        puts line
         evt = @convertidorJsonObjeto.convertir_evento_no_array(line)
-        evt.getCalendario()
         eventosArray << evt
+      end
+    end
+
+    eventosArray
+  end
+
+  def obtener_evento_por_id(idEvento)
+    eventos = listar_todos_los_eventos()
+
+    eventoABuscar = eventos.find { |evento| evento.getId() == idEvento }
+
+    eventoABuscar
+  end
+
+  def listar_todos_los_eventos()
+    
+    path = @almacenamientoCalendario + "/*.txt"
+    eventosArray = []
+
+    @dir.glob(path) do |archivoCalendario|
+      @file.foreach(archivoCalendario).with_index do |line, line_num|
+        if(line_num != 0)
+          evt = @convertidorJsonObjeto.convertir_evento_no_array(line)
+          eventosArray << evt
+        end
       end
     end
 
