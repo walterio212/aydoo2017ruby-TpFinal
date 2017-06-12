@@ -16,7 +16,9 @@ class Persistor
   end 
 
   def crear_calendario(calendario)
-    nombreCalendario = calendario.getNombre()
+    nombreCalendario = calendario.getNombre().downcase
+    calendario.setNombre(nombreCalendario.downcase)
+
     fullName = obtener_fullname(nombreCalendario)
     if(!existe_el_archivo?(fullName))      
       archivo = @file.new(fullName, "w")
@@ -144,9 +146,14 @@ class Persistor
     eventosCalendario = listar_eventos_por_calendario(evento.getCalendario())
     evento = eventosCalendario.find { |eventoCalendario| eventoCalendario.getId() == idEvento }
 
-    evento.setInicio(actualizadorEvento.getInicio())
-    evento.setFin(actualizadorEvento.getFin())
-
+    if(!actualizadorEvento.getInicio().nil?)
+      evento.setInicio(actualizadorEvento.getInicio())  
+    end
+    
+    if(!actualizadorEvento.getFin().nil?)
+      evento.setFin(actualizadorEvento.getFin())
+    end
+    
     recrear_archivo(nombreCalendario, eventosCalendario)
   end
 
@@ -163,7 +170,7 @@ class Persistor
   end
 
   def existe_el_archivo?(nombre)
-    @file.file?(nombre.downcase)
+    @file.file?(nombre)
   end
 
   def obtener_fullname(nombreCalendario)
