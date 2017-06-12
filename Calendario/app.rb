@@ -10,7 +10,6 @@
   #-------------------------------------
   # CREA UN CALENDARIO
   #-------------------------------------
-  # LISTO
   #   {
   #    "nombre":"calendario1" 
   #   } 
@@ -28,7 +27,6 @@
   # BORRA UN CALENDARIO
   #------------------------------------- 
   #
-  # LISTO
   #DELETE /calendarios/calendario1
   #status=200
   #status=404 (no encontrado)
@@ -41,8 +39,6 @@
   #-------------------------------------
   # DEVUELVE TODOS LOS CALENDARIOS
   #------------------------------------- 
-  #
-  # FALTA
   #[
   #  {
   #    "nombre":"calendario1"
@@ -125,7 +121,6 @@
   
   end
 
-
   #-------------------------------------
   # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
   #-------------------------------------
@@ -138,42 +133,6 @@
 
   end
 
-  #-------------------------------------
-  # DEVUELVE LOS EVENTOS
-  #------------------------------------- 
-  # 
-  get '/eventos' do   
-  
-    convertidor = ConvertidorObjetoJson.new()
-  
-    evento1 = Evento.new(Calendario.new("Calendario1"),
-    "testEvento",
-    "fiesta",
-    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
-    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
-    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
-    
-     evento2 = Evento.new(Calendario.new("Calendario1"),
-    "testEvento",
-    "fiesta",
-    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
-    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
-    Recurrencia.new('diario',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z"))) 
-    
-     evento3 = Evento.new(Calendario.new("Calendario1"),
-    "testEvento",
-    "fiesta",
-    DateTime.strptime("2017-03-31T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
-    DateTime.strptime("2017-03-31T22:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),
-    Recurrencia.new('semanal',DateTime.strptime("2017-03-31T18:00:00-03:00", "%Y-%m-%dT%H:%M:%S%z")))
-    
-    array_eventos = [evento1,evento2,evento3]
-    
-    convertidor.convertir_eventos(array_eventos);
-    
-  
-  end
-  
   #-------------------------------------
   # DEVUELVE EVENTO POR ID
   #------------------------------------- 

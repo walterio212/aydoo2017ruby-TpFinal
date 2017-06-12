@@ -45,7 +45,7 @@ class ConvertidorJsonObjeto
 
     respuesta = nil
 
-    if json.nil? || json.empty? || ! es_json?(json)
+    if json.nil? || json.empty?
       return respuesta
     end
 

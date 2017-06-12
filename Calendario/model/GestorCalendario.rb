@@ -16,12 +16,14 @@ class GestorCalendario
       persistor = Persistor.new(File, Dir), 
       convertidorJsonObjeto = ConvertidorJsonObjeto.new(), 
       convertidorObjetoJson = ConvertidorObjetoJson.new(),
-      validadorCalendario = ValidadorCalendario.new()
+      validadorCalendario = ValidadorCalendario.new(),
+      json = JSON
       )
     @persistor = persistor
     @conversorJsonObjeto = convertidorJsonObjeto  
     @conversorObjetoJson = convertidorObjetoJson
     @validadorCalendario = validadorCalendario
+    @json = json
   end
 
   def crearCalendario(jsonCalendario)
@@ -69,6 +71,11 @@ class GestorCalendario
 
   def listarTodosLosCalendarios()
     calendarios = @persistor.listar_todos_los_calendarios()
-    JSON.dump(@conversorObjetoJson.convertir_calendarios(calendarios))
+    @json.dump(@conversorObjetoJson.convertir_calendarios(calendarios))
+  end
+
+  def listarEventosPorCalendario(nombreCalendario)
+    eventos = @persistor.listar_eventos_por_calendario(nombreCalendario)
+    @json.dump(@conversorObjetoJson.convertir_eventos(eventos))
   end
 end
