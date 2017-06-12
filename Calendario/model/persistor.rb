@@ -16,7 +16,9 @@ class Persistor
   end 
 
   def crear_calendario(calendario)
-    nombreCalendario = calendario.getNombre()
+    nombreCalendario = calendario.getNombre().downcase
+    calendario.setNombre(nombreCalendario.downcase)
+
     fullName = obtener_fullname(nombreCalendario)
     if(!existe_el_archivo?(fullName))      
       archivo = @file.new(fullName, "w")
@@ -168,7 +170,7 @@ class Persistor
   end
 
   def existe_el_archivo?(nombre)
-    @file.file?(nombre.downcase)
+    @file.file?(nombre)
   end
 
   def obtener_fullname(nombreCalendario)

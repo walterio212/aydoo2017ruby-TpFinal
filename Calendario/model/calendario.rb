@@ -10,6 +10,10 @@ class Calendario
     @nombre
   end
 
+  def setNombre(nombre)
+    @nombre = nombre
+  end
+
   def to_json
     {"nombre"=>@nombre}
   end
