@@ -121,11 +121,16 @@
   # BORRA UN EVENTO POR ID
   #------------------------------------- 
   # 
-  delete '/eventos/id' do
-  
+  delete '/eventos/:id' do
+    gestor = GestorCalendario.new()
+    respuesta = gestor.borrarEvento(params['id'])
+
+    status respuesta.getEstado()
+
+    response.body = respuesta.getRespuesta()
   end
 
-  
+
   #-------------------------------------
   # DEVUELVE TODOS LOS EVENTOS
   #-------------------------------------

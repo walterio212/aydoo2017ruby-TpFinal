@@ -88,4 +88,10 @@ class GestorCalendario
     evento = @persistor.obtener_evento_por_id(idEvento)
     @json.dump(@conversorObjetoJson.convertir_evento(evento))
   end
+
+  def borrarEvento(idEvento)
+    @persistor.borrar_evento(idEvento)
+    
+    webResponse = WebResponse.new("", 200, "")
+  end
 end
