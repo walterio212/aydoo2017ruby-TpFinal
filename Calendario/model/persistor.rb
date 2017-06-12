@@ -131,13 +131,23 @@ class Persistor
 
     eventosCalendario.delete(evento)
 
-    calendario = obtener_calendario_sin_eventos(nombreCalendario)
-    fullName = obtener_fullname(nombreCalendario)
-    archivo = @file.new(fullName, "w")
-    jsonCalendario = @convertidorObjetoJson.convertir_calendario(calendario)
-    archivo.puts(jsonCalendario)
-    eventosCalendario.each {|x| archivo.puts(@convertidorObjetoJson.convertir_evento(x))}
-    archivo.close
+    recrear_archivo(nombreCalendario, eventosCalendario)
+  end
+
+  def modificar_evento(actualizadorEvento)
+
+    idEvento = actualizadorEvento.getId()
+
+    evento = obtener_evento_por_id(idEvento)
+    nombreCalendario = evento.getCalendario()
+
+    eventosCalendario = listar_eventos_por_calendario(evento.getCalendario())
+    evento = eventosCalendario.find { |eventoCalendario| eventoCalendario.getId() == idEvento }
+
+    evento.setInicio(actualizadorEvento.getInicio())
+    evento.setFin(actualizadorEvento.getFin())
+
+    recrear_archivo(nombreCalendario, eventosCalendario)
   end
 
   private 
@@ -166,5 +176,15 @@ class Persistor
     calendario = nil
     @file.open(archivoCalendario) { |f| calendario = @convertidorJsonObjeto.convertir_calendario_no_array(f.readline)}
     calendario
+  end
+
+  def recrear_archivo(nombreCalendario, eventosCalendario)
+    calendario = obtener_calendario_sin_eventos(nombreCalendario)
+    fullName = obtener_fullname(nombreCalendario)
+    archivo = @file.new(fullName, "w")
+    jsonCalendario = @convertidorObjetoJson.convertir_calendario(calendario)
+    archivo.puts(jsonCalendario)
+    eventosCalendario.each {|x| archivo.puts(@convertidorObjetoJson.convertir_evento(x))}
+    archivo.close
   end
 end

@@ -4,6 +4,7 @@ require_relative 'calendario'
 require_relative 'evento'
 require_relative 'evento_builder'
 require_relative 'recurrencia'
+require_relative 'actualizador_evento'
 
 class ConvertidorJsonObjeto
 
@@ -98,6 +99,26 @@ class ConvertidorJsonObjeto
     
     json_parseado = JSON.parse(json);
     respuesta = json_parseado["nombre"]
+    
+    return respuesta
+  end
+
+  def convertir_actualizador(jsonActualizador)
+    respuesta = nil;
+    
+    if jsonActualizador.nil? || jsonActualizador.empty?
+      return respuesta
+    end
+    
+    json_parseado = JSON.parse(jsonActualizador)
+
+    inicio = json_parseado["inicio"]
+    fin = json_parseado["fin"]
+
+    fecha_inicio = DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
+    fecha_fin = DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
+
+    respuesta = ActualizadorEvento.new(json_parseado["id"], fecha_inicio, fin)
     
     return respuesta
   end

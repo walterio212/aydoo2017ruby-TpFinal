@@ -114,7 +114,12 @@
   #  "fin": "2017-03-31T22:00:00-03:00",
   #}
   put '/eventos' do
-  
+    gestor = GestorCalendario.new()
+    respuesta = gestor.modificarEvento(request.body.read)
+
+    status respuesta.getEstado()
+
+    response.body = respuesta.getRespuesta()
   end
   
   #-------------------------------------
