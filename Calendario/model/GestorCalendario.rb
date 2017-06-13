@@ -67,7 +67,16 @@ class GestorCalendario
   end
 
   def borrarCalendario(nombreCalendario)
-    @persistor.borrar_calendario(nombreCalendario)
+    webResponse = WebResponse.new("", 200, "")
+    begin 
+      @validadorCalendario.validar_calendario_existente(nombreCalendario)
+      @persistor.borrar_calendario(nombreCalendario)
+    rescue CalendarioInexistenteError => e 
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    end
+
+    webResponse
   end
 
   def listarTodosLosCalendarios()
@@ -76,8 +85,18 @@ class GestorCalendario
   end
 
   def listarEventosPorCalendario(nombreCalendario)
-    eventos = @persistor.listar_eventos_por_calendario(nombreCalendario)
-    @json.dump(@conversorObjetoJson.convertir_eventos(eventos))
+    webResponse = WebResponse.new("html", 200, "")
+    begin 
+      @validadorCalendario.validar_calendario_existente(nombreCalendario)
+      eventos = @persistor.listar_eventos_por_calendario(nombreCalendario)
+      webResponse.setRespuesta(@json.dump(@conversorObjetoJson.convertir_eventos(eventos)))
+      webResponse.setContentType(:json)
+    rescue CalendarioInexistenteError => e 
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    end
+
+    webResponse
   end
 
   def listarTodosLosEventos()

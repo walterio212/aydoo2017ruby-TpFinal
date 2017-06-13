@@ -10,10 +10,12 @@ describe 'GestorCalendario' do
   it 'Borrar Calendario invoca al persistor a borrar calendario' do
     persistorDouble = double('Persistor', :borrar_calendario => "borrado") 
     convertidorJsonObjetoDouble = double('ConvertidorJsonObjeto')
-    validador = double("Validador")
+    validador = double("Validador", :validar_calendario_existente => "valido")
+
     convertidorObjetoJsonDouble = double("convertidorObjetoJsonDouble")
 
     expect(persistorDouble).to receive(:borrar_calendario).with("calendario1")
+    expect(validador).to receive(:validar_calendario_existente).with("calendario1")
     gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador)
     gestor.borrarCalendario("calendario1")
   end
@@ -136,15 +138,17 @@ describe 'GestorCalendario' do
     
     convertidorJsonObjetoDouble = double("convertidorJsonObjetoDouble")
     persistorDouble = double('Persistor', :listar_eventos_por_calendario => [evento]) 
-    validador = double('VAlidador')
+    validador = double('VAlidador', :validar_calendario_existente => "validado") 
     convertidorObjetoJsonDouble = double('ConvertidorObjetoJson', :convertir_eventos => [evento])
     jsondouble = double('JSON', :dump => "convertido")
 
+    expect(validador).to receive(:validar_calendario_existente).with("Calendario1")
     expect(persistorDouble).to receive(:listar_eventos_por_calendario).with("Calendario1")
     expect(jsondouble).to receive(:dump).with([evento])
     gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador, jsondouble)
     rta = gestor.listarEventosPorCalendario('Calendario1')
 
-    expect(rta).to eq "convertido"
+    expect(rta.getRespuesta()).to eq "convertido"
+    expect(rta.getEstado()).to eq 200
   end
 end

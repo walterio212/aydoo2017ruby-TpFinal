@@ -35,7 +35,10 @@
 
   delete '/calendarios/:nombre' do
     gestor = GestorCalendario.new()
-    gestor.borrarCalendario(params['nombre'])
+    respuesta = gestor.borrarCalendario(params['nombre'])
+
+    status respuesta.getEstado()
+    response.body = respuesta.getRespuesta()
   end
 
   #-------------------------------------
@@ -136,12 +139,12 @@
     response.body = respuesta.getRespuesta()
   end
 
-
+  set(:query) {  |value| condition { request.query_string == "" } }
   #-------------------------------------
   # DEVUELVE TODOS LOS EVENTOS
   #-------------------------------------
   #
-  get '/eventos' do
+  get '/eventos', :query => true do
 
     content_type :json
 
@@ -150,19 +153,28 @@
 
   end
 
+
   #-------------------------------------
   # DEVUELVE LOS EVENTOS DADO EL NOMBRE DE CALENDARIO
   #-------------------------------------
   #
-  get '/eventos' do
-
-    content_type :json
+  get '/eventos?:calendario?' do
 
     gestor = GestorCalendario.new()
-    response.body = gestor.listarEventosPorCalendario(params['calendario'])
+    respuesta = gestor.listarEventosPorCalendario(params['calendario'])
 
+    content_type respuesta.getContentType()
+    status respuesta.getEstado()
+
+    response.body = respuesta.getRespuesta()
   end
 
+  
+
+  
+  
+
+    
   #-------------------------------------
   # DEVUELVE EVENTO POR ID
   #------------------------------------- 
