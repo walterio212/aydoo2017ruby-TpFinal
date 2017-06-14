@@ -7,6 +7,8 @@ Integrantes :
   
 V1.1.0
 
+Link a travis: https://travis-ci.org/walterio212/aydoo2017ruby-TpFinal
+
 El modelo de la aplicación se construyo en base  a la clase Persistor y la clase GestorCalendario. 
 
 GestorCalendario posee la lógica de llamadas a los métodos de validación y llamados de persistencia de datos. Es el eslabon principal de comunicación con la app.rb. El gestor realiza las llamadas a los validadores correspondientes y las llamadas al persistor.
