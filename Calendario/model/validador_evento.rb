@@ -82,6 +82,7 @@ class ValidadorEvento
 
   end
 
+  #Excepcion si el evento ya existe, true si la validacion fue exitosa
   def validar_id_evento_ya_existente(id)
 
     arrayEventos = @persistor.listar_todos_los_eventos
@@ -92,6 +93,7 @@ class ValidadorEvento
       end
     end
 
+    true
   end
 
 end
