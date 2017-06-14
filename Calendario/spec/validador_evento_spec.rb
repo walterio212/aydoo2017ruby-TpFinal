@@ -5,6 +5,9 @@ require_relative '../model/evento_id_ya_existente_error'
 require_relative '../model/../model/evento_ya_existente_en_calendario_error'
 require_relative '../model/../model/../model/calendario_sin_nombre_error'
 require_relative '../model/../model/../model/../model/evento_calendario_no_existente_error'
+require_relative '../model/../model/../model/../model/../model/evento_fechas_incoherentes_error'
+require_relative '../model/../model/../model/../model/../model/evento_duracion_maxima_invalida_error'
+require_relative '../model/../model/../model/../model/../model/evento_superposicion_de_eventos_error'
 
 
 describe 'ValidadorEvento' do
@@ -142,6 +145,37 @@ describe 'ValidadorEvento' do
 
   end
 
+  it 'velidarFechaFinPosteriorFechaInicioDeberiaDevolverTrueSiSeCumpleLaCondicion' do
+
+    persistorDouble = double('Persistor')
+
+    validador = ValidadorEvento.new(persistorDouble)
+    fechaInicio = DateTime.now()
+    fechaFin = DateTime.now()
+    fechaFin = fechaFin >> 1
+
+    evento = Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",fechaInicio,fechaFin,Recurrencia.new("anual",Date.new()))
+
+    expect(validador.validar_fecha_fin_posterior_fecha_inicio(evento)).to eq true
+
+  end
+
+
+  it 'velidarFechaFinPosteriorFechaInicioDeberiaDevolverErrorSiNOSeCumpleLaCondicion' do
+
+    persistorDouble = double('Persistor')
+
+    validador = ValidadorEvento.new(persistorDouble)
+    fechaInicio = DateTime.now()
+    fechaFin = DateTime.now()
+    fechaInicio = fechaInicio >> 1
+
+    evento = Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",fechaInicio,fechaFin,Recurrencia.new("anual",Date.new()))
+
+    expect{ validador.validar_fecha_fin_posterior_fecha_inicio(evento) }.
+        to raise_error(EventoFechasIncoherentesError)
+
+  end
 
 
 

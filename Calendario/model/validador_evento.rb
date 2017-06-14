@@ -11,19 +11,6 @@ class ValidadorEvento
     @persistor = persistor
   end
 
-  def validar_crear_evento(evento)
-
-    nombreCalendario = evento.getCalendario()
-    id = evento.getId()
-    nombreEvento = evento.getNombre()
-
-    validar_nombre_calendario_no_vacio(nombreCalendario)
-    validar_calendario_existente(nombreCalendario)
-    validar_id_evento_ya_existente(id)
-    validar_coherencia_fechas(evento)
-
-  end
-
   def validar_modificar_evento(evento)
     #TODO
   end
@@ -32,22 +19,20 @@ class ValidadorEvento
     #TODO
   end
 
-  def validar_coherencia_fechas(evento)
 
+  def validar_duracion_evento_permitida(evento) #3 dias maximo
     fechaInicio = evento.getInicio().to_time.utc
     fechaFin = evento.getFin().to_time.utc
 
-    #chequeo que la fecha de fin no sea menor o igual a la de inicio
-    if(fechaFin<=fechaInicio)
-      raise EventoFechasIncoherentesError.new()
-    end
-
-    #chequeo que la diferencia entre la fecha final y la inicial no sea mayor a 72 horas
     if (fechaFin - fechaInicio).to_i > 3 #dias
       raise EventoDuracionMaximaInvalidaError.new()
     end
+  end
 
-    #chequeo que no se superponga con ningun otro evento
+  def validar_no_superposicion_de_eventos(evento)
+
+    fechaInicio = evento.getInicio().to_time.utc
+    fechaFin = evento.getFin().to_time.utc
 
     arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
 
@@ -105,5 +90,18 @@ class ValidadorEvento
     end
     true
   end
+
+  def validar_fecha_fin_posterior_fecha_inicio(evento)
+    fechaInicio = evento.getInicio().to_time.utc
+    fechaFin = evento.getFin().to_time.utc
+
+    if(fechaInicio>=fechaFin)
+      raise EventoFechasIncoherentesError.new()
+    end
+
+    true
+  end
+
+
 
 end
