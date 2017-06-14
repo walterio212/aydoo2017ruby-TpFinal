@@ -4,6 +4,7 @@ require_relative '../model/validador_evento'
 require_relative '../model/evento_id_ya_existente_error'
 require_relative '../model/../model/evento_ya_existente_en_calendario_error'
 require_relative '../model/../model/../model/calendario_sin_nombre_error'
+require_relative '../model/../model/../model/../model/evento_calendario_no_existente_error'
 
 
 describe 'ValidadorEvento' do
@@ -107,6 +108,37 @@ describe 'ValidadorEvento' do
     validador = ValidadorEvento.new(persistorDouble)
     expect{ validador.validar_nombre_calendario_no_vacio("") }.
         to raise_error(CalendarioSinNombreError)
+
+  end
+
+
+  it 'darNombreCalendarioNOVacioAlCrearEventoDeberiaDevolverTrue' do
+
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [Evento.new("calendario1","fiesta","fiestaLoca1",Date.new(),Date.new(),Recurrencia.new("anual",Date.new())),
+                                                                             Evento.new("calendario1","fiestaSecreta","fiesaLoca2",Date.new(),Date.new(),Recurrencia.new("anual",Date.new())),
+                                                                             Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",Date.new(),Date.new(),Recurrencia.new("anual",Date.new()))])
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect(validador.validar_nombre_calendario_no_vacio("CalendarioFantastico")).to eq true
+
+  end
+
+  it 'darNombreCalendarioExistenteAlCrearEventoDeberiaDevolverTrue' do
+
+    persistorDouble = double('Persistor', :existe_calendario? => true)
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect(validador.validar_calendario_existente("Calendario1")).to eq true
+
+  end
+
+  it 'darNombreCalendarioInexisteAlCrearEventoDeberiaDevolverError' do
+
+    persistorDouble = double('Persistor', :existe_calendario? => false)
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect{ validador.validar_calendario_existente("") }.
+        to raise_error(EventoCalendarioNoExistenteError)
 
   end
 

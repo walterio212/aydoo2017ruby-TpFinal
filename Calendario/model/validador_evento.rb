@@ -2,6 +2,7 @@ require_relative '../model/persistor'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
 require_relative '../model/calendario_inexistente_error'
+require_relative '../model/evento_calendario_no_existente_error'
 
 
 class ValidadorEvento
@@ -29,13 +30,6 @@ class ValidadorEvento
 
   def validar_borrar_evento(evento)
     #TODO
-  end
-
-
-  def validar_calendario_existente(nombreCalendario)
-    if(@persistor.existe_calendario?(nombreCalendario.downcase))
-      raise CalendarioNombreExistenteError.new()
-    end
   end
 
   def validar_coherencia_fechas(evento)
@@ -70,7 +64,7 @@ class ValidadorEvento
   #Excepcion si el evento ya existe, true si la validacion fue exitosa
   def validar_id_evento_ya_existente(id)
 
-    arrayEventos = @persistor.listar_todos_los_eventos
+    arrayEventos = @persistor.listar_todos_los_eventos()
 
     arrayEventos.each do |evento|
       if(evento.getId()==id)
@@ -100,6 +94,16 @@ class ValidadorEvento
     if(nombreCalendario.to_s == "")
       raise CalendarioSinNombreError.new()
     end
+
+    true
+  end
+
+
+  def validar_calendario_existente(nombreCalendario)
+    if(! @persistor.existe_calendario?(nombreCalendario.downcase))
+      raise EventoCalendarioNoExistenteError.new()
+    end
+    true
   end
 
 end

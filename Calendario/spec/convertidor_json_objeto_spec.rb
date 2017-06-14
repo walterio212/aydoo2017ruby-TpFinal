@@ -31,7 +31,6 @@ describe 'ConvertidorJsonObjeto' do
     expect(convertidor.convertir_calendario_no_array('{"nombre": "calendario1"}').getNombre()).to eq "calendario1"
   end
 
-
   it 'Test metodo convertir_evento: 
   El convertidor al recibir este json deberia tener id->eventoTest' do
     expect(convertidor.convertir_evento_no_array(
