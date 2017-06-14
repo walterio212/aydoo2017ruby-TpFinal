@@ -15,7 +15,7 @@ describe 'ValidadorEvento' do
 
   end
 
-  it 'crearEvento id existente error' do
+  it 'crearEventoIdExitosoDeberiaDevolverTrue' do
 
     persistorDouble = double('Persistor', :listar_todos_los_eventos => [Evento.new("calendario1","fiesta","fiesaLoca",Date.new(),Date.new(),Recurrencia.new("anual",Date.new()))])
     crearEvento = Evento.new("calendario2","fiestaNoTanConocida","fiesaLocaDeDisfraces",Date.new(),Date.new(),Recurrencia.new("anual",Date.new()))
