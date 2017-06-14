@@ -189,25 +189,19 @@ describe 'ValidadorEvento' do
 
     expect{ validador.validar_duracion_evento_permitida(evento) }.
         to raise_error(EventoDuracionMaximaInvalidaError)
-
   end
 
 
   it 'validarDuracionEventoPermitidoSiDuraMenosDe3HorasCumpleLaCondicionDevuelveTrue' do
-
     persistorDouble = double('Persistor')
 
     validador = ValidadorEvento.new(persistorDouble)
     fechaInicio = DateTime.now()
     fechaFin = DateTime.now() + 2#dias
 
-    puts fechaInicio
-    puts fechaFin
-
     evento = Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",fechaInicio,fechaFin,Recurrencia.new("anual",Date.new()))
 
     expect( validador.validar_duracion_evento_permitida(evento) ).to eq true
-
   end
 
 end

@@ -3,6 +3,7 @@ require_relative '../model/GeneralError'
 require_relative '../model/calendario'
 require_relative '../model/convertidor_json_objeto'
 require_relative '../model/convertidor_objeto_json'
+require_relative '../model/validador_evento'
 require_relative '../model/validador_calendario'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
@@ -17,12 +18,14 @@ class GestorCalendario
       convertidorJsonObjeto = ConvertidorJsonObjeto.new(), 
       convertidorObjetoJson = ConvertidorObjetoJson.new(),
       validadorCalendario = ValidadorCalendario.new(),
+      #validadorEvento = ValidadorEvento.new(),
       json = JSON
       )
     @persistor = persistor
     @conversorJsonObjeto = convertidorJsonObjeto  
     @conversorObjetoJson = convertidorObjetoJson
     @validadorCalendario = validadorCalendario
+    #@validadorEvento     = validadorEvento
     @json = json
   end
 
