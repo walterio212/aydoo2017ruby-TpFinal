@@ -110,7 +110,7 @@ describe 'GestorCalendario' do
     convertidorObjetoJsonDouble = double("convertidorObjetoJsonDouble")
     persistorDouble = double('Persistor', :crear_evento => "creado") 
     validador = double('VAlidador')
-    validadorEvento = double('validadorEvento',:validar_calendario_existente=>true,:validar_duracion_evento_permitida=>true,:validar_fecha_fin_posterior_fecha_inicio=>true,:validar_id_evento_ya_existente=>true,:validar_nombre_evento_ya_existente_en_calendario=>true)
+    validadorEvento = double('validadorEvento',:validar_calendario_existente=>true,:validar_duracion_evento_permitida=>true,:validar_fecha_fin_posterior_fecha_inicio=>true,:validar_id_evento_ya_existente=>true,:validar_nombre_evento_ya_existente_en_calendario=>true,:validar_no_superposicion_de_eventos=>true)
     convertidorJsonObjetoDouble = double('ConvertidorJsonObjeto', :convertir_evento_no_array => evento)
 
     expect(persistorDouble).to receive(:crear_evento).with(evento)

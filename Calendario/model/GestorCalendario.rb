@@ -79,7 +79,7 @@ class GestorCalendario
       @validadorEvento.validar_fecha_fin_posterior_fecha_inicio(evento)
       @validadorEvento.validar_id_evento_ya_existente(evento.getId())
       @validadorEvento.validar_nombre_evento_ya_existente_en_calendario(evento.getCalendario(),evento.getNombre())
-      #@validadorEvento.validar_no_superposicion_de_eventos(evento) #TODO revisar
+      @validadorEvento.validar_no_superposicion_de_eventos(evento) #TODO revisar
       @persistor.crear_evento(evento)
 
     rescue EventoCalendarioNoExistenteError => e
@@ -156,15 +156,48 @@ class GestorCalendario
     rescue EventoInexistenteError => e
       webResponse.setEstado(404)
       webResponse.setRespuesta(e.message)
+
     end
 
     webResponse
   end
 
   def modificarEvento(jsonActualizador)
+
+    webResponse = WebResponse.new("html", 200, "")
+
+    begin
+
     actualizadorEvento = @conversorJsonObjeto.convertir_actualizador(jsonActualizador)
+    @validadorEvento.validar_existe_evento?(actualizadorEvento.getId)
+    evento = @persistor.obtener_evento_por_id(actualizadorEvento.getId)
+    @validadorEvento.validar_calendario_existente(evento.getCalendario())
     @persistor.modificar_evento(actualizadorEvento)
 
-    webResponse = WebResponse.new("", 200, "")
+    rescue EventoCalendarioNoExistenteError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    rescue EventoDuracionMaximaInvalidaError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    rescue EventoFechasIncoherentesError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    rescue EventoIdYaExistenteError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    rescue EventoYaExistenteEnCalendarioError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    rescue EventoInexistenteError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    rescue CalendarioInexistenteError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+
+    end
+
+    webResponse
   end
 end

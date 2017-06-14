@@ -113,9 +113,9 @@
   # 
   #{
   #  "calendario":"untref", # no puede cambiar
-  #  "nombre":"aydoo", # no cambia
+  #  "id":"id_evento":, # no cambia
   #  "inicio": "2017-03-31T18:00:00-03:00",
-  #  "fin": "2017-03-31T22:00:00-03:00",
+  #  "fin": "2017-03-31T22:00:00-03:00"
   #}
   put '/eventos' do
     gestor = GestorCalendario.new()
