@@ -43,18 +43,6 @@ class ValidadorEvento
     end
   end
 
-  def validar_nombre_evento_ya_existente_en_calendario(nombreCalendario,nombreEvento)
-    arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
-
-    if(! arrayEventos.empty?)
-      arrayEventos.each do |evento|
-        if evento.getNombre() == nombreEvento
-          raise EventoYaExistenteEnCalendarioError.new()
-        end
-      end
-    end
-  end
-
   def validar_coherencia_fechas(evento)
 
     fechaInicio = evento.getInicio().to_time.utc
@@ -82,6 +70,8 @@ class ValidadorEvento
 
   end
 
+  #TESTEADOS
+
   #Excepcion si el evento ya existe, true si la validacion fue exitosa
   def validar_id_evento_ya_existente(id)
 
@@ -95,5 +85,20 @@ class ValidadorEvento
 
     true
   end
+
+  def validar_nombre_evento_ya_existente_en_calendario(nombreCalendario,nombreEvento)
+    arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
+
+    if(! arrayEventos.empty?)
+      arrayEventos.each do |evento|
+        if evento.getNombre() == nombreEvento
+          raise EventoYaExistenteEnCalendarioError.new()
+        end
+      end
+    end
+
+    true
+  end
+
 
 end
