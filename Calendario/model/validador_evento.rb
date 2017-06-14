@@ -31,6 +31,18 @@ class ValidadorEvento
 
   end
 
+  def validar_existe_evento?(id)
+
+    arrayEventos = @persistor.listar_todos_los_eventos()
+
+    arrayEventos.each do |evento|
+      if(evento.getId()==id)
+        return true
+      end
+    end
+
+    raise EventoInexistenteError.new()
+  end
 
   def validar_id_evento_ya_existente(id)
 
@@ -100,7 +112,7 @@ class ValidadorEvento
 
   def validar_no_superposicion_de_eventos(evento)
 
-    arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
+    arrayEventos = @persistor.listar_eventos_por_calendario(evento.getNombre.downcase)
 
     arrayEventos.each do |evento|
       if(evento.periodo_dentro_de_Evento?)

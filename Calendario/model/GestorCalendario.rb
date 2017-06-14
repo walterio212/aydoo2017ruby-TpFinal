@@ -8,6 +8,13 @@ require_relative '../model/validador_calendario'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
 require_relative '../model/calendario_inexistente_error'
+require_relative '../model/evento_calendario_no_existente_error'
+require_relative '../model/evento_duracion_maxima_invalida_error'
+require_relative '../model/evento_fechas_incoherentes_error'
+require_relative '../model/evento_id_ya_existente_error'
+require_relative '../model/evento_inexistente_error'
+require_relative '../model/evento_superposicion_de_eventos_error'
+require_relative '../model/evento_ya_existente_en_calendario_error'
 require_relative '../model/persistor'
 require_relative '../model/web_response'
 
@@ -64,7 +71,33 @@ class GestorCalendario
   def crearEvento(jsonEvento)
     webResponse = WebResponse.new("", 200, "")
     evento = @conversorJsonObjeto.convertir_evento_no_array(jsonEvento)
-    @persistor.crear_evento(evento)
+
+    begin
+
+      @validadorEvento.validar_calendario_existente(evento.getCalendario())
+      @validadorEvento.validar_duracion_evento_permitida(evento)
+      @validadorEvento.validar_fecha_fin_posterior_fecha_inicio(evento)
+      @validadorEvento.validar_id_evento_ya_existente(evento.getId())
+      @validadorEvento.validar_nombre_evento_ya_existente_en_calendario(evento.getCalendario(),evento.getNombre())
+      #@validadorEvento.validar_no_superposicion_de_eventos(evento) #TODO revisar
+      @persistor.crear_evento(evento)
+
+    rescue EventoCalendarioNoExistenteError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoDuracionMaximaInvalidaError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoFechasIncoherentesError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoIdYaExistenteError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoYaExistenteEnCalendarioError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+    end
 
     webResponse
   end
@@ -113,9 +146,19 @@ class GestorCalendario
   end
 
   def borrarEvento(idEvento)
-    @persistor.borrar_evento(idEvento)
 
-    webResponse = WebResponse.new("", 200, "")
+    webResponse = WebResponse.new("html", 200, "")
+
+    begin
+      @validadorEvento.validar_existe_evento?(idEvento)
+      @persistor.borrar_evento(idEvento)
+
+    rescue EventoInexistenteError => e
+      webResponse.setEstado(404)
+      webResponse.setRespuesta(e.message)
+    end
+
+    webResponse
   end
 
   def modificarEvento(jsonActualizador)
