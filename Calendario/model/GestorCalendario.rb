@@ -18,14 +18,14 @@ class GestorCalendario
       convertidorJsonObjeto = ConvertidorJsonObjeto.new(), 
       convertidorObjetoJson = ConvertidorObjetoJson.new(),
       validadorCalendario = ValidadorCalendario.new(),
-      #validadorEvento = ValidadorEvento.new(),
+      validadorEvento = ValidadorEvento.new(),
       json = JSON
       )
     @persistor = persistor
     @conversorJsonObjeto = convertidorJsonObjeto  
     @conversorObjetoJson = convertidorObjetoJson
     @validadorCalendario = validadorCalendario
-    #@validadorEvento     = validadorEvento
+    @validadorEvento     = validadorEvento
     @json = json
   end
 

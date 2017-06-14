@@ -140,12 +140,13 @@ describe 'GestorCalendario' do
     persistorDouble = double('Persistor', :listar_eventos_por_calendario => [evento]) 
     validador = double('VAlidador', :validar_calendario_existente => "validado") 
     convertidorObjetoJsonDouble = double('ConvertidorObjetoJson', :convertir_eventos => [evento])
+    validadorEvento = double('ValidadorEvento')
     jsondouble = double('JSON', :dump => "convertido")
 
     expect(validador).to receive(:validar_calendario_existente).with("Calendario1")
     expect(persistorDouble).to receive(:listar_eventos_por_calendario).with("Calendario1")
     expect(jsondouble).to receive(:dump).with([evento])
-    gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador, jsondouble)
+    gestor = GestorCalendario.new(persistorDouble, convertidorJsonObjetoDouble, convertidorObjetoJsonDouble, validador, validadorEvento,jsondouble)
     rta = gestor.listarEventosPorCalendario('Calendario1')
 
     expect(rta.getRespuesta()).to eq "convertido"
