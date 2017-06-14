@@ -59,21 +59,21 @@ class ConvertidorJsonObjeto
     return respuesta
 
   end
-  
+
   def convertir_evento(json)
-    
+
     respuesta = nil
-    
+
     if json.nil? || json.empty? || ! es_json?(json)
       return respuesta
     end
-    
+
     json = hacer_json_valido(json)
-    
+
     respuesta = []
-  
+
     json_parseado = JSON.parse(json);
-    
+
     json_parseado.each { |evento_json|
 
     recurrencia = crear_recurrencia(evento_json["recurrencia"])
@@ -83,11 +83,11 @@ class ConvertidorJsonObjeto
 
     fecha_inicio = DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
     fecha_fin = DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
-        
-    respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],"Date.new()","Date.new()",recurrencia) }
-    
+
+    respuesta << Evento.new(evento_json["calendario"],evento_json["nombre"],evento_json["id"],fecha_inicio,fecha_fin,recurrencia) }
+
     return respuesta
-  
+
   end
 
   def obtenerPropiedadDeJson(nombrePropiedad, json)

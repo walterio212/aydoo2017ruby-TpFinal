@@ -31,11 +31,6 @@ class ValidadorEvento
     #TODO
   end
 
-  def validar_nombre_calendario_no_vacio(nombreCalendario)
-    if(nombreCalendario.to_s == "")
-      raise CalendarioSinNombreError.new()
-    end
-  end
 
   def validar_calendario_existente(nombreCalendario)
     if(@persistor.existe_calendario?(nombreCalendario.downcase))
@@ -100,5 +95,11 @@ class ValidadorEvento
     true
   end
 
+
+  def validar_nombre_calendario_no_vacio(nombreCalendario)
+    if(nombreCalendario.to_s == "")
+      raise CalendarioSinNombreError.new()
+    end
+  end
 
 end
