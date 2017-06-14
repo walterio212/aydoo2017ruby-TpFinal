@@ -145,7 +145,7 @@ describe 'ValidadorEvento' do
 
   end
 
-  it 'velidarFechaFinPosteriorFechaInicioDeberiaDevolverTrueSiSeCumpleLaCondicion' do
+  it 'validarFechaFinPosteriorFechaInicioDeberiaDevolverTrueSiSeCumpleLaCondicion' do
 
     persistorDouble = double('Persistor')
 
@@ -161,7 +161,7 @@ describe 'ValidadorEvento' do
   end
 
 
-  it 'velidarFechaFinPosteriorFechaInicioDeberiaDevolverErrorSiNOSeCumpleLaCondicion' do
+  it 'validarFechaFinPosteriorFechaInicioDeberiaDevolverErrorSiNOSeCumpleLaCondicion' do
 
     persistorDouble = double('Persistor')
 
@@ -177,6 +177,37 @@ describe 'ValidadorEvento' do
 
   end
 
+  it 'validarDuracionEventoPermitidoSiDura5DiasNoCumpleLaCondicionDevuelveError' do
 
+    persistorDouble = double('Persistor')
+
+    validador = ValidadorEvento.new(persistorDouble)
+    fechaInicio = DateTime.now()
+    fechaFin = DateTime.now() + 86400*5 #5 dia
+
+    evento = Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",fechaInicio,fechaFin,Recurrencia.new("anual",Date.new()))
+
+    expect{ validador.validar_duracion_evento_permitida(evento) }.
+        to raise_error(EventoDuracionMaximaInvalidaError)
+
+  end
+
+
+  it 'validarDuracionEventoPermitidoSiDuraMenosDe3HorasCumpleLaCondicionDevuelveTrue' do
+
+    persistorDouble = double('Persistor')
+
+    validador = ValidadorEvento.new(persistorDouble)
+    fechaInicio = DateTime.now()
+    fechaFin = DateTime.now() + 2#dias
+
+    puts fechaInicio
+    puts fechaFin
+
+    evento = Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",fechaInicio,fechaFin,Recurrencia.new("anual",Date.new()))
+
+    expect( validador.validar_duracion_evento_permitida(evento) ).to eq true
+
+  end
 
 end

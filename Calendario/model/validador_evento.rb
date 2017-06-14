@@ -13,20 +13,15 @@ class ValidadorEvento
 
   def validar_modificar_evento(evento)
     #TODO
+
+    #exista el evento
+    #superposicion de fechas
+    #(obtener evento por id, fichando las fechas por las que vengan que no sean null)
   end
 
   def validar_borrar_evento(evento)
     #TODO
-  end
-
-
-  def validar_duracion_evento_permitida(evento) #3 dias maximo
-    fechaInicio = evento.getInicio().to_time.utc
-    fechaFin = evento.getFin().to_time.utc
-
-    if (fechaFin - fechaInicio).to_i > 3 #dias
-      raise EventoDuracionMaximaInvalidaError.new()
-    end
+    #exista el evento
   end
 
   def validar_no_superposicion_de_eventos(evento)
@@ -102,6 +97,16 @@ class ValidadorEvento
     true
   end
 
+  def validar_duracion_evento_permitida(evento) #3 dias maximo
+    fechaInicio = evento.getInicio().to_time.utc
+    fechaFin = evento.getFin().to_time.utc
+
+    if (fechaFin - fechaInicio).to_i > 86400*3 #dias
+      raise EventoDuracionMaximaInvalidaError.new()
+    end
+
+    true
+  end
 
 
 end
