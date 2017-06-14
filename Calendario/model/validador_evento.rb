@@ -19,29 +19,19 @@ class ValidadorEvento
     #(obtener evento por id, fichando las fechas por las que vengan que no sean null)
   end
 
-  def validar_borrar_evento(evento)
-    #TODO
-    #exista el evento
-  end
+  def validar_evento_existente(id)
 
-  def validar_no_superposicion_de_eventos(evento)
-
-    fechaInicio = evento.getInicio().to_time.utc
-    fechaFin = evento.getFin().to_time.utc
-
-    arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
+    arrayEventos = @persistor.listar_todos_los_eventos()
 
     arrayEventos.each do |evento|
-      if(evento.periodo_dentro_de_Evento?)
-        raise EventoYaExistenteEnCalendarioError.new()
+      if(evento.getId()==id)
+        raise EventoInexistenteError.new()
       end
     end
 
   end
 
-  #TESTEADOS
 
-  #Excepcion si el evento ya existe, true si la validacion fue exitosa
   def validar_id_evento_ya_existente(id)
 
     arrayEventos = @persistor.listar_todos_los_eventos()
@@ -106,6 +96,18 @@ class ValidadorEvento
     end
 
     true
+  end
+
+  def validar_no_superposicion_de_eventos(evento)
+
+    arrayEventos = @persistor.listar_eventos_por_calendario(nombreCalendario.downcase)
+
+    arrayEventos.each do |evento|
+      if(evento.periodo_dentro_de_Evento?)
+        raise EventoYaExistenteEnCalendarioError.new()
+      end
+    end
+
   end
 
 

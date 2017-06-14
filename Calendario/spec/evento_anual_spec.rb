@@ -29,6 +29,6 @@ describe 'EventoAnual Tests' do
 
     expect(fecha_ocupada).to eq  false
   end
-  
+
 
 end

@@ -8,6 +8,8 @@ require_relative '../model/../model/../model/../model/evento_calendario_no_exist
 require_relative '../model/../model/../model/../model/../model/evento_fechas_incoherentes_error'
 require_relative '../model/../model/../model/../model/../model/evento_duracion_maxima_invalida_error'
 require_relative '../model/../model/../model/../model/../model/evento_superposicion_de_eventos_error'
+require_relative '../model/../model/../model/../model/../model/../model/evento_ya_existente_error'
+require_relative '../model/../model/../model/../model/../model/../model/../model/evento_inexistente_error'
 
 
 describe 'ValidadorEvento' do
@@ -203,5 +205,19 @@ describe 'ValidadorEvento' do
 
     expect( validador.validar_duracion_evento_permitida(evento) ).to eq true
   end
+
+  it 'validarEventoExistenteDeberiaDevolverNilPorqueNoExisteElEventoACrear' do
+
+    persistorDouble = double('Persistor', :listar_todos_los_eventos => [Evento.new("calendario1","fiesta","fiestaLoca1",Date.new(),Date.new(),Recurrencia.new("anual",Date.new())),
+                                                                             Evento.new("calendario1","fiestaSecreta","fiesaLoca2",Date.new(),Date.new(),Recurrencia.new("anual",Date.new())),
+                                                                             Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",Date.new(),Date.new(),Recurrencia.new("anual",Date.new()))])
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect{ validador.validar_evento_existente("fiesta") }.
+        to raise_error(EventoInexistenteError)
+
+  end
+
+
 
 end
