@@ -30,20 +30,8 @@ describe 'ConvertidorJsonObjeto' do
   it 'Test metodo convertir_calendario: El convertidor al recibir [{"nombre": "calendario1"},{"nombre": "calendario2"},{"nombre": "calendario3"}] deberia devolver un array de 3 posiciones' do
     expect(convertidor.convertir_calendario_no_array('{"nombre": "calendario1"}').getNombre()).to eq "calendario1"
   end
-  
-   
-  
-  #Test convertir_evento
-  
-  it 'Test metodo convertir_evento: El convertidor al recibir algo vacio deberia devolver nil' do
-    expect(convertidor.convertir_evento("")).to eq nil
-  end
-  
-  it 'Test metodo convertir_evento: El convertidor al recibir nil devolver nil' do
-    expect(convertidor.convertir_evento(nil)).to eq nil
-  end
-  
-  
+
+
   it 'Test metodo convertir_evento: 
   El convertidor al recibir este json deberia tener id->eventoTest' do
     expect(convertidor.convertir_evento_no_array(
