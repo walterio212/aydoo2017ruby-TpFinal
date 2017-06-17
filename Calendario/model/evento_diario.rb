@@ -20,7 +20,8 @@ class EventoDiario< Evento
     iteraciones = 1
 
     while finUtc < finRecurrenciaUtc && !estaOcupada do
-      if(inicioUtc < fechaUtc && fechaUtc < finUtc)
+
+      if(fechaUtc.between?(inicioUtc,finUtc))
         estaOcupada = true
       end
 
