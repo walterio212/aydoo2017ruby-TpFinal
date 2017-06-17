@@ -24,8 +24,8 @@ class EventoAnual < Evento
         estaOcupada = true
       end
 
-      inicioUtc = (getInicio() + (365 * iteraciones)).to_time.utc
-      finUtc = (getFin() + (365 * iteraciones)).to_time.utc
+      inicioUtc = (getInicio() >> iteraciones*12).to_time.utc
+      finUtc = (getFin()  >> iteraciones*12).to_time.utc
 
       iteraciones += 1
     end

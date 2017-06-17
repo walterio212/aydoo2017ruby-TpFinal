@@ -28,6 +28,7 @@ class EventoDiario< Evento
       inicioUtc = (getInicio() + (1 * iteraciones)).to_time.utc
       finUtc = (getFin() + (1 * iteraciones)).to_time.utc
 
+
       iteraciones += 1
     end
 
