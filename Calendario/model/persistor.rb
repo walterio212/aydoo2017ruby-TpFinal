@@ -77,12 +77,9 @@ class Persistor
   def listar_eventos_por_calendario(nombreCalendario)
     fullName = obtener_fullname(nombreCalendario)
     eventosArray = []
-    @file.foreach(fullName).with_index do |line, line_num|
-      if(line_num != 0)
-        evt = @convertidorJsonObjeto.convertir_evento_no_array(line)
-        eventosArray << evt
-      end
-    end
+
+    line_num = 0
+    listar_eventos_por_archivo_en_array(fullName, eventosArray)
 
     eventosArray
   end
@@ -100,13 +97,9 @@ class Persistor
     path = @almacenamientoCalendario + "/*.txt"
     eventosArray = []
 
-    @dir.glob(path) do |archivoCalendario|
-      @file.foreach(archivoCalendario).with_index do |line, line_num|
-        if(line_num != 0)
-          evt = @convertidorJsonObjeto.convertir_evento_no_array(line)
-          eventosArray << evt
-        end
-      end
+    @dir.glob(path).each do |archivoCalendario|
+      line_num = 0
+      listar_eventos_por_archivo_en_array(archivoCalendario, eventosArray)
     end
 
     eventosArray
@@ -191,5 +184,17 @@ class Persistor
     archivo.puts(jsonCalendario)
     eventosCalendario.each {|x| archivo.puts(@convertidorObjetoJson.convertir_evento(x))}
     archivo.close
+  end
+
+  def listar_eventos_por_archivo_en_array(fullName, eventosArray)
+    line_num = 0
+    @file.readlines(fullName).each do |line|
+      if(line_num != 0)
+        evt = @convertidorJsonObjeto.convertir_evento_no_array(line)
+        eventosArray << evt
+      end
+
+      line_num += 1
+    end
   end
 end

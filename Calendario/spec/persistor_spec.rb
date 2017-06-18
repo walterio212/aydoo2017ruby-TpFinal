@@ -133,4 +133,111 @@ describe 'Persistor' do
 
     expect(existeCalendario).to eq false
   end
+
+  it 'Listar todos los eventos lee todos los archivos y lista sus eventos' do
+    fileDouble = double('File', :directory? => true, :file? => true)
+    dirDouble = double('Dir')
+    conversorJsonObjetoDouble = double('conversorJsonObjeto')
+    
+    lineasArchivoCalendario1 = ["{'nombre': 'calendario1'}", "{'nombre': 'evento1', 'calendario': 'calendario1'}"]
+
+    lineasArchivoCalendario2 = ["{'nombre': 'calendario2'}","{'nombre': 'evento2', 'calendario': 'calendario2'}"]
+
+    allow(dirDouble).to receive(:glob).with("almacenamientoCalendario/*.txt") {["almacenamientoCalendario/calendario1.txt","almacenamientoCalendario/calendario2.txt"]}
+
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario1.txt") { lineasArchivoCalendario1 }
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario2.txt") { lineasArchivoCalendario2 }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento1', 'calendario': 'calendario1'}") { EventoDiario.new("calendario1","ev1","evento1",nil,nil,nil) }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento2', 'calendario': 'calendario2'}") { EventoDiario.new("calendario2","ev2","evento2",nil,nil,nil) }
+
+    expect(dirDouble).to receive(:glob).with("almacenamientoCalendario/*.txt")
+    persistidor = Persistor.new(fileDouble, dirDouble, nil, conversorJsonObjetoDouble)
+    calendarios = persistidor.listar_todos_los_eventos()
+
+    expect(calendarios.size()).to eq 2
+    expect(calendarios[0].getNombre()).to eq "evento1"
+    expect(calendarios[1].getNombre()).to eq "evento2"
+  end
+
+  it 'Listar todos los eventos lee todos los archivos sin eventos en ellos devuelve array vacio' do
+    fileDouble = double('File', :directory? => true, :file? => true)
+    dirDouble = double('Dir')
+    conversorJsonObjetoDouble = double('conversorJsonObjeto')
+    
+    lineasArchivoCalendario1 = ["{'nombre': 'calendario1'}"]
+
+    lineasArchivoCalendario2 = ["{'nombre': 'calendario2'}"]
+
+    allow(dirDouble).to receive(:glob).with("almacenamientoCalendario/*.txt") {["almacenamientoCalendario/calendario1.txt","almacenamientoCalendario/calendario2.txt"]}
+
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario1.txt") { lineasArchivoCalendario1 }
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario2.txt") { lineasArchivoCalendario2 }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento1', 'calendario': 'calendario1'}") { EventoDiario.new("calendario1","ev1","evento1",nil,nil,nil) }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento2', 'calendario': 'calendario2'}") { EventoDiario.new("calendario2","ev2","evento2",nil,nil,nil) }
+
+    expect(dirDouble).to receive(:glob).with("almacenamientoCalendario/*.txt")
+    persistidor = Persistor.new(fileDouble, dirDouble, nil, conversorJsonObjetoDouble)
+    calendarios = persistidor.listar_todos_los_eventos()
+
+    expect(calendarios.size()).to eq 0
+  end
+
+  it 'Listar todos los eventos por nombre calendario busca el archivo y lista sus eventos' do
+    fileDouble = double('File', :directory? => true, :file? => true)
+    dirDouble = double('Dir')
+    conversorJsonObjetoDouble = double('conversorJsonObjeto')
+    
+    lineasArchivoCalendario1 = ["{'nombre': 'calendario1'}", "{'nombre': 'evento1', 'calendario': 'calendario1'}"]
+
+    allow(fileDouble)
+      .to receive(:join)
+      .with("almacenamientoCalendario", "calendario1.txt") {"almacenamientoCalendario/calendario1.txt"} 
+
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario1.txt") { lineasArchivoCalendario1 }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento1', 'calendario': 'calendario1'}") { EventoDiario.new("calendario1","ev1","evento1",nil,nil,nil) }
+
+    persistidor = Persistor.new(fileDouble, dirDouble, nil, conversorJsonObjetoDouble)
+    calendarios = persistidor.listar_eventos_por_calendario('calendario1')
+
+    expect(calendarios.size()).to eq 1
+    expect(calendarios[0].getNombre()).to eq "evento1"
+  end
+
+  it 'Listar todos los eventos por nombre calendario sin eventos devuelve array vacio' do
+    fileDouble = double('File', :directory? => true, :file? => true)
+    dirDouble = double('Dir')
+    conversorJsonObjetoDouble = double('conversorJsonObjeto')
+    
+    lineasArchivoCalendario1 = ["{'nombre': 'calendario1'}"]
+
+    allow(fileDouble)
+      .to receive(:join)
+      .with("almacenamientoCalendario", "calendario1.txt") {"almacenamientoCalendario/calendario1.txt"} 
+
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario1.txt") { lineasArchivoCalendario1 }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento1', 'calendario': 'calendario1'}") { EventoDiario.new("calendario1","ev1","evento1",nil,nil,nil) }
+
+    persistidor = Persistor.new(fileDouble, dirDouble, nil, conversorJsonObjetoDouble)
+    calendarios = persistidor.listar_eventos_por_calendario('calendario1')
+
+    expect(calendarios.size()).to eq 0
+  end
 end
