@@ -1,4 +1,5 @@
 require_relative '../model/persistor'
+require_relative '../model/evento_builder'
 require_relative '../model/calendario_nombre_existente_error'
 require_relative '../model/calendario_sin_nombre_error'
 require_relative '../model/calendario_inexistente_error'
@@ -7,8 +8,9 @@ require_relative '../model/evento_calendario_no_existente_error'
 
 class ValidadorEvento
 
-  def initialize(persistor = Persistor.new())
+  def initialize(persistor = Persistor.new(),builder = EventoBuilder.new() )
     @persistor = persistor
+    @builder   = builder
   end
 
   def validar_modificar_evento(evento)
@@ -117,8 +119,8 @@ class ValidadorEvento
 
   def validar_recurrencia_actualizador(actualizador)
 
-      eventoEnPersistor = persistor.obtener_evento_por_id(actualizador.getId())
-      eventoNuevo = recrearEvento(eventoEnPersistor, actualizador.getRecurrencia())
+      eventoEnPersistor = @persistor.obtener_evento_por_id(actualizador.getId())
+      eventoNuevo = @builder.recrear_evento(eventoEnPersistor, actualizador.getRecurrencia())
 
       validar_fecha_fin_posterior_fecha_inicio(eventoNuevo)
       validar_duracion_evento_permitida(eventoNuevo)

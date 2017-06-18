@@ -40,14 +40,16 @@ class EventoBuilder
       nuevaRecurrencia = Recurrencia.new(recurrencia["frecuencia"],DateTime.parse(recurrencia["fin"]).to_date)
     end
 
+    nuevaRecurrencia
   end
 
   def recrear_evento(evento, actualizador)
-    frecuenciaNueva = actualizador.getRecurrencia().getFrecuencia()
+    recurrencia = actualizador.getRecurrencia().nil? ? evento.getRecurrencia() : actualizador.getRecurrencia()
+    frecuencia =  actualizador.getRecurrencia().nil? ? evento.getRecurrencia().getFrecuencia() : "norecurrente"
     inicio = actualizador.getInicio().nil? ? evento.getInicio() : actualizador.getInicio()
     fin = actualizador.getFin().nil?       ? evento.getFin() : actualizador.getFin()
 
-    tipo_de_evento = TipoEventos[frecuenciaNueva]
+    tipo_de_evento = TipoEventos[frecuencia]
 
     return tipo_de_evento.new(evento.getCalendario(), evento.getId(), evento.getNombre(), inicio, fin, recurrencia)
   end
