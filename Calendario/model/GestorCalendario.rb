@@ -176,11 +176,6 @@ class GestorCalendario
       evento = @persistor.obtener_evento_por_id(actualizadorEvento.getId)
 
       @validadorEvento.validar_recurrencia_actualizador(actualizadorEvento)
-      @validadorEvento.validar_calendario_existente(evento.getCalendario())
-      @validadorEvento.validar_fecha_fin_posterior_fecha_inicio(evento)
-      @validadorEvento.validar_duracion_evento_permitida(evento)
-      @validadorEvento.validar_no_superposicion_de_eventos(evento)
-
 
       @persistor.modificar_evento(actualizadorEvento)
 

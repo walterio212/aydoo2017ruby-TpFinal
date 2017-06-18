@@ -119,13 +119,64 @@ class ValidadorEvento
 
   def validar_recurrencia_actualizador(actualizador)
 
-      eventoEnPersistor = @persistor.obtener_evento_por_id(actualizador.getId())
-      eventoNuevo = @builder.recrear_evento(eventoEnPersistor, actualizador.getRecurrencia())
+    #preparo los dos eventos, el viejo y el nuevo
+    eventoEnPersistor = @persistor.obtener_evento_por_id(actualizador.getId())
+    eventoNuevo = @builder.recrear_evento(eventoEnPersistor, actualizador)
 
-      validar_fecha_fin_posterior_fecha_inicio(eventoNuevo)
-      validar_duracion_evento_permitida(eventoNuevo)
-      validar_no_superposicion_de_eventos(eventoNuevo)
+    #actualizo la lista contra la que voy a validar la validez de la actualizacion
+    arrayEventos = @persistor.listar_eventos_por_calendario(eventoNuevo.getCalendario().downcase)
+    eventoABorrar = arrayEventos.find { |x| eventoNuevo.getId() == x.getId() }
+    arrayEventos.delete(eventoABorrar)
+
+    validar_fecha_fin_posterior_fecha_inicio_actualizar(eventoNuevo)
+    validar_duracion_evento_permitida_actualizar(eventoNuevo)
+    validar_no_superposicion_de_eventos_actualizar(eventoNuevo,arrayEventos)
+
+    true
+
 
   end
+
+  def validar_no_superposicion_de_eventos_actualizar(eventoNuevo,arrayEventos)
+
+    arrayEventos.each do |evento|
+      if(evento.periodo_dentro_de_Evento?(eventoNuevo.getInicio(),eventoNuevo.getFin()))
+
+        raise EventoSuperposicionDeEventosError.new()
+
+      end
+    end
+
+    true
+
+  end
+
+  def validar_duracion_evento_permitida_actualizar(eventoNuevo)
+
+    fechaInicio = eventoNuevo.getInicio().to_time.utc
+    fechaFin = eventoNuevo.getFin().to_time.utc
+
+    if (fechaFin - fechaInicio).to_i > 86400*3 #dias
+      raise EventoDuracionMaximaInvalidaError.new()
+    end
+
+    true
+
+
+  end
+
+  def validar_fecha_fin_posterior_fecha_inicio_actualizar(eventoNuevo)
+
+    fechaInicio = eventoNuevo.getInicio().to_time.utc
+    fechaFin = eventoNuevo.getFin().to_time.utc
+
+    if(fechaInicio>=fechaFin)
+      raise EventoFechasIncoherentesError.new()
+    end
+
+    true
+
+  end
+
 
 end
