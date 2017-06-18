@@ -2,6 +2,7 @@ require_relative '../model/evento_diario'
 require_relative '../model/evento_semanal'
 require_relative '../model/evento_mensual'
 require_relative '../model/evento_anual'
+require_relative '../model/evento_no_recurrente'
 
 class EventoBuilder
 
@@ -9,7 +10,8 @@ class EventoBuilder
     "diaria" => EventoDiario,
     "semanal" => EventoSemanal,
     "mensual" => EventoMensual,
-    "anual" => EventoAnual
+    "anual" => EventoAnual,
+    "norecurrente" => EventoNoRecurrente
   ]
 
   def crear (evento_json)

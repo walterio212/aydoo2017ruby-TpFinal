@@ -46,10 +46,18 @@ class EventoBuilderSpec
       expect(evento.class).to eq EventoDiario
     end
 
+    it 'Al crear un evento sin recurrencia el builder devuelve un eventoNoRecurrente' do
+
+      json  = '{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00"}'
+
+      evento_json = JSON.parse(json);
+
+      evento = builder.crear(evento_json)
+
+      expect(evento.class).to eq EventoNoRecurrente
+      expect(evento.getRecurrencia().getFrecuencia()).to eq "norecurrente"
+      expect(evento.getRecurrencia().getFin()).to eq nil
+    end
 
   end
-
-
-
-
 end
