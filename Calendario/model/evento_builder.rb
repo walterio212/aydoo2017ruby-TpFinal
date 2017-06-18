@@ -31,12 +31,14 @@ class EventoBuilder
 
 
 
-  def crear_recurrencia(json)
+  def crear_recurrencia(recurrencia)
 
-    #chequear que la frecuencia sea una frecuencia valida
-
-    Recurrencia.new(json["frecuencia"],DateTime.parse(json["fin"]).to_date)
-
+    nuevaRecurrencia = nil
+    if(recurrencia.nil?)
+      nuevaRecurrencia = Recurrencia.new("norecurrente", nil)
+    else
+      nuevaRecurrencia = Recurrencia.new(recurrencia["frecuencia"],DateTime.parse(recurrencia["fin"]).to_date)
+    end
   end
 
 end
