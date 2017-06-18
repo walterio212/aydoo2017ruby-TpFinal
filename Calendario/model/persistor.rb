@@ -135,6 +135,10 @@ class Persistor
       evento.setFin(actualizadorEvento.getFin())
     end
     
+    if(!actualizadorEvento.getRecurrencia().nil?)
+      evento.setRecurrencia(actualizadorEvento.getRecurrencia())
+    end
+
     recrear_archivo(nombreCalendario, eventosCalendario)
   end
 

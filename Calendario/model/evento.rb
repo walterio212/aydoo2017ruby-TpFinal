@@ -38,6 +38,10 @@ class Evento
   def setFin(fin)
     @fin = fin
   end
+
+  def setRecurrencia(recurrencia) 
+    @recurrencia = recurrencia
+  end
   
   def getRecurrencia()
     @recurrencia

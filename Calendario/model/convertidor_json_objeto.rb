@@ -84,11 +84,14 @@ class ConvertidorJsonObjeto
 
     inicio = json_parseado["inicio"]
     fin = json_parseado["fin"]
+    recurrenciaJson = json_parseado["recurrencia"]
+
+    recurrencia = recurrenciaJson.nil? ? nil : Recurrencia.new(recurrenciaJson["frecuencia"],DateTime.parse(recurrenciaJson["fin"]).to_date)
 
     fecha_inicio = inicio.nil? ? nil : DateTime.strptime(inicio,"%Y-%m-%dT%H:%M:%S%z")
     fecha_fin = fin.nil? ? nil : DateTime.strptime(fin,"%Y-%m-%dT%H:%M:%S%z")
 
-    respuesta = ActualizadorEvento.new(json_parseado["id"], fecha_inicio, fin)
+    respuesta = ActualizadorEvento.new(json_parseado["id"], fecha_inicio, fecha_fin, recurrencia)
     
     return respuesta
   end
