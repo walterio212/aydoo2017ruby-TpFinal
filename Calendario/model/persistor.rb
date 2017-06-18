@@ -109,7 +109,7 @@ class Persistor
     evento = obtener_evento_por_id(idEvento)
     nombreCalendario = evento.getCalendario()
 
-    eventosCalendario = listar_eventos_por_calendario(evento.getCalendario())
+    eventosCalendario = listar_eventos_por_calendario(nombreCalendario)
     evento = eventosCalendario.find { |eventoCalendario| eventoCalendario.getId() == idEvento }
 
     eventosCalendario.delete(evento)

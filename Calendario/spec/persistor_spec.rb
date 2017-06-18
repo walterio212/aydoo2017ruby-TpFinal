@@ -272,7 +272,7 @@ describe 'Persistor' do
     expect(evento.getCalendario()).to eq "calendario1"
   end
 
-  it 'obtener eventos por id con evento iexistente devuelve nil' do 
+  it 'obtener eventos por id con evento inexistente devuelve nil' do 
     fileDouble = double('File', :directory? => true, :file? => true)
     dirDouble = double('Dir')
     conversorJsonObjetoDouble = double('conversorJsonObjeto')
@@ -347,5 +347,52 @@ describe 'Persistor' do
     calendario = persistidor.crear_evento(evento)
 
     expect(archivo.string).to eq "{'nombre': 'evento2', 'calendario': 'calendario1'}\n" 
+  end
+
+  it 'crear evento agrega una linea con el json del evento con mock propio' do 
+    fileDouble = double('File', :directory? => true, :file? => true)
+    conversorObjetoJsonDouble = double('conversorObjetoJson')
+    dirDouble = double('Dir')
+    archivo = ArchivoDouble.new()
+    archivo.puts("{'nombre':'calendario1'}")
+
+    evento = EventoDiario.new("calendario1","ev2","evento2",nil,nil,nil)
+
+    allow(fileDouble)
+      .to receive(:open)
+      .with("almacenamientoCalendario/calendario1.txt", "a+")
+      .and_yield(archivo)
+
+    allow(fileDouble)
+      .to receive(:join)
+      .with("almacenamientoCalendario", "calendario1.txt") {"almacenamientoCalendario/calendario1.txt"} 
+
+    allow(conversorObjetoJsonDouble)
+      .to receive(:convertir_calendario)
+      .with(evento) { "{'nombre': 'evento2', 'calendario': 'calendario1'}" }
+
+    persistidor = Persistor.new(fileDouble, dirDouble, conversorObjetoJsonDouble, nil)
+    calendario = persistidor.crear_evento(evento)
+
+    expect(archivo.getLineas()[0]).to eq "{'nombre':'calendario1'}"
+    expect(archivo.getLineas()[1]).to eq "{'nombre': 'evento2', 'calendario': 'calendario1'}"
+  end
+end
+
+class ArchivoDouble
+
+  def initialize()
+    @lineas = []
+  end
+
+  def puts(linea)
+    @lineas << linea
+  end
+
+  def getLineas()
+    @lineas
+  end
+
+  def close()
   end
 end
