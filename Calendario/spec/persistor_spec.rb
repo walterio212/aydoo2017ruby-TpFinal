@@ -377,6 +377,62 @@ describe 'Persistor' do
     expect(archivo.getLineas()[0]).to eq "{'nombre':'calendario1'}"
     expect(archivo.getLineas()[1]).to eq "{'nombre': 'evento2', 'calendario': 'calendario1'}"
   end
+
+  it 'borrar evento busca el evento entre todos los archivos y recrea el archvio sin el evento' do 
+    fileDouble = double('File', :directory? => true, :file? => true)
+    dirDouble = double('Dir')
+    conversorJsonObjetoDouble = double('conversorJsonObjeto')
+    conversorObjetoJsonDouble = double('conversorObjetoJson')
+    archivo = StringIO.new("{'nombre': 'calendario1'}\n")
+
+    allow(fileDouble)
+      .to receive(:join)
+      .with("almacenamientoCalendario", "calendario1.txt") {"almacenamientoCalendario/calendario1.txt"} 
+
+    allow(fileDouble)
+      .to receive(:open)
+      .with("almacenamientoCalendario/calendario1.txt")
+      .and_yield(archivo)
+
+    lineasArchivoCalendario1 = ["{'nombre': 'calendario1'}", "{'nombre': 'evento1', 'id': 'ev1', 'calendario': 'calendario1'}"]
+
+    lineasArchivoCalendario2 = ["{'nombre': 'calendario2'}","{'nombre': 'evento2', 'id': 'ev2', 'calendario': 'calendario2'}"]
+
+    allow(dirDouble).to receive(:glob).with("almacenamientoCalendario/*.txt") {["almacenamientoCalendario/calendario1.txt","almacenamientoCalendario/calendario2.txt"]}
+
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario1.txt") { lineasArchivoCalendario1 }
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario2.txt") { lineasArchivoCalendario2 }
+
+    eventoDiarioCal1 = EventoDiario.new("calendario1","ev1","evento1",nil,nil,nil)
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento1', 'id': 'ev1', 'calendario': 'calendario1'}") { eventoDiarioCal1 }
+
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento2', 'id': 'ev2', 'calendario': 'calendario2'}") { EventoDiario.new("calendario2","ev2","evento2",nil,nil,nil) }
+
+
+    calendario1 = Calendario.new("calendario1")
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_calendario_no_array)
+      .with("{'nombre': 'calendario1'}\n") { calendario1 }
+
+    archivoRecreado = ArchivoDouble.new() 
+    allow(fileDouble).to receive(:new).with("almacenamientoCalendario/calendario1.txt", "w") { archivoRecreado }
+
+    allow(conversorObjetoJsonDouble).to receive(:convertir_calendario).with(calendario1) { "{'nombre': 'calendario1'}" }
+
+    expect(conversorObjetoJsonDouble).not_to receive(:convertir_evento)
+    expect(dirDouble).to receive(:glob).with("almacenamientoCalendario/*.txt")
+    persistidor = Persistor.new(fileDouble, dirDouble, conversorObjetoJsonDouble, conversorJsonObjetoDouble)
+    persistidor.borrar_evento("ev1")
+
+    lineas = archivoRecreado.getLineas()
+
+    expect(lineas.size()).to eq 1
+    expect(lineas[0]).to eq "{'nombre': 'calendario1'}"
+  end
 end
 
 class ArchivoDouble
