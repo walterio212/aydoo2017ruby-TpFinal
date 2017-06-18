@@ -5,6 +5,14 @@ class CalendarioEventos
     @eventos = eventos
   end
 
+  def getCalendario() 
+    @calendario
+  end
+
+  def getEventos() 
+    @eventos
+  end
+
   def to_json() 
     {"calendario" => @calendario.to_json, "eventos" => eventosArrayJson}
   end

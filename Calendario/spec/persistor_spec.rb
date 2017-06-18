@@ -686,6 +686,43 @@ describe 'Persistor' do
     expect(lineas[0]).to eq "{'nombre': 'calendario1'}"
     expect(lineas[1]).to eq "{'nombre': 'evento1', 'id': 'ev1', 'calendario': 'calendario1'}, 'inicio': '2001-03-29', 'fin': '2001-03-30'"
   end
+
+  it 'obtener calendario eventos devuelve el objeto calendario junto con un array de eventos' do 
+    fileDouble = double('File', :directory? => true, :file? => true)
+    conversorJsonObjetoDouble = double('conversorJsonObjeto')
+    dirDouble = double('Dir')
+    archivo = StringIO.new("{'nombre': 'calendario1'}\n{'nombre': 'evento1', 'calendario': 'calendario1'}")
+
+    lineasArchivoCalendario1 = ["{'nombre': 'calendario1'}", "{'nombre': 'evento1', 'calendario': 'calendario1'}"]
+
+    allow(fileDouble).to receive(:readlines).with("almacenamientoCalendario/calendario1.txt") { lineasArchivoCalendario1 }
+
+    eventodiario = EventoDiario.new("calendario1","ev1","evento1",nil,nil,nil)
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_evento_no_array)
+      .with("{'nombre': 'evento1', 'calendario': 'calendario1'}") { eventodiario }
+
+    allow(fileDouble)
+      .to receive(:open)
+      .with("almacenamientoCalendario/calendario1.txt")
+      .and_yield(archivo)
+
+    allow(fileDouble)
+      .to receive(:join)
+      .with("almacenamientoCalendario", "calendario1.txt") {"almacenamientoCalendario/calendario1.txt"} 
+
+    calendario1 = Calendario.new("calendario1")
+    allow(conversorJsonObjetoDouble)
+      .to receive(:convertir_calendario_no_array)
+      .with("{'nombre': 'calendario1'}\n") { calendario1 }
+
+    persistidor = Persistor.new(fileDouble, dirDouble, nil, conversorJsonObjetoDouble)
+    calendarioEventos = persistidor.obtener_calendario_eventos("calendario1")
+
+    expect(calendarioEventos.getCalendario()).to eq calendario1
+    expect(calendarioEventos.getEventos().size()).to eq 1
+    expect(calendarioEventos.getEventos()[0]).to eq eventodiario
+  end
 end
 
 class ArchivoDouble
