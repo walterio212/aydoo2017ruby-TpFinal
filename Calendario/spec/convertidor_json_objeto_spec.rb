@@ -85,4 +85,76 @@ describe 'ConvertidorJsonObjeto' do
 
   end
 
+  it 'convertir actualizador con recurrencia crea la recurrencia en el objeto actualizador' do
+
+    respuesta = convertidor.convertir_actualizador('{
+        "id" : "eventoTest",
+        "inicio" : "2017-03-31T18:00:00-03:00",
+        "fin" : "2017-03-31T18:00:00-03:00",
+        "recurrencia" : {
+            "frecuencia" : "anual",
+            "fin" : "2017-03-31T18:00:00-03:00"
+        }
+    }')
+
+    expect(respuesta.getId()).to eq "eventoTest"
+    expect(respuesta.getInicio().to_s).to eq "2017-03-31T18:00:00-03:00"
+    expect(respuesta.getFin().to_s).to eq "2017-03-31T18:00:00-03:00"
+    expect(respuesta.getRecurrencia().getFrecuencia()).to eq "anual"
+    expect(respuesta.getRecurrencia().getFin().to_s).to eq "2017-03-31"
+  end
+
+  it 'convertir actualizador sin recurrencia crea el objeto actualizador con recurrencia nil' do
+
+    respuesta = convertidor.convertir_actualizador('{
+        "id" : "eventoTest",
+        "inicio" : "2017-03-31T18:00:00-03:00",
+        "fin" : "2017-03-31T18:00:00-03:00"     
+    }')
+
+    expect(respuesta.getId()).to eq "eventoTest"
+    expect(respuesta.getInicio().to_s).to eq "2017-03-31T18:00:00-03:00"
+    expect(respuesta.getFin().to_s).to eq "2017-03-31T18:00:00-03:00"
+    expect(respuesta.getRecurrencia()).to eq nil
+  end
+
+  it 'convertir actualizador sin inicio crea el objeto actualizador con inicio nil' do
+
+    respuesta = convertidor.convertir_actualizador('{
+        "id" : "eventoTest",
+        "fin" : "2017-03-31T18:00:00-03:00"     
+    }')
+
+    expect(respuesta.getId()).to eq "eventoTest"
+    expect(respuesta.getInicio()).to eq nil
+    expect(respuesta.getFin().to_s).to eq "2017-03-31T18:00:00-03:00"
+    expect(respuesta.getRecurrencia()).to eq nil
+  end
+
+  it 'convertir actualizador sin inicio crea el objeto actualizador con inicio nil' do
+
+    respuesta = convertidor.convertir_actualizador('{
+        "id" : "eventoTest",
+        "inicio" : "2017-03-31T18:00:00-03:00"     
+    }')
+
+    expect(respuesta.getId()).to eq "eventoTest"
+    expect(respuesta.getInicio().to_s).to eq "2017-03-31T18:00:00-03:00"
+    expect(respuesta.getFin()).to eq nil
+    expect(respuesta.getRecurrencia()).to eq nil
+  end
+
+  it 'convertir actualizador json nil devuelve nil' do
+
+    respuesta = convertidor.convertir_actualizador(nil)
+
+    expect(respuesta).to eq nil
+  end
+
+  it 'convertir actualizador json vacio devuelve nil' do
+
+    respuesta = convertidor.convertir_actualizador("")
+
+    expect(respuesta).to eq nil
+  end
 end
