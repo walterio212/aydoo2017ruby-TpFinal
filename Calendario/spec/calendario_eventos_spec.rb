@@ -21,4 +21,16 @@ describe 'CalendarioEventos' do
 
     expect(json).to eq "{\"calendario\":{\"nombre\":\"calendario1\"},\"eventos\":[{\"calendario\":\"calendario1\",\"id\":\"ev1\",\"nombre\":\"evento1\",\"inicio\":\"2001-03-29T00:00:00+00:00\",\"fin\":\"2001-03-30T00:00:00+00:00\",\"recurrencia\":{\"frecuencia\":\"semanal\",\"fin\":\"2001-04-20T00:00:00+00:00\"}},{\"calendario\":\"calendario1\",\"id\":\"ev2\",\"nombre\":\"evento2\",\"inicio\":\"2001-03-29T00:00:00+00:00\",\"fin\":\"2001-03-30T00:00:00+00:00\",\"recurrencia\":{\"frecuencia\":\"semanal\",\"fin\":\"2001-04-20T00:00:00+00:00\"}}]}"
   end
+
+  it 'to_json de Calendario Eventos con eventos vacio devuelve el json de CalendarioEventos invocando a to_json' do
+
+    calendario1 = Calendario.new("calendario1")
+
+    calEventos = CalendarioEventos.new(calendario1, [])
+
+    json = JSON.dump(calEventos.to_json())
+
+    expect(json).to eq "{\"calendario\":{\"nombre\":\"calendario1\"},\"eventos\":[]}"
+
+  end
 end
