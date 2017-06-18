@@ -29,14 +29,24 @@ class EventoBuilder
 
   end
 
-
-
   def crear_recurrencia(json)
 
     #chequear que la frecuencia sea una frecuencia valida
 
+    #TODO
+
     Recurrencia.new(json["frecuencia"],DateTime.parse(json["fin"]).to_date)
 
+  end
+
+  def recrear_evento(evento, actualizador)
+    frecuenciaNueva = actualizador.getRecurrencia().getFrecuencia()
+    inicio = actualizador.getInicio().nil? ? evento.getInicio() : actualizador.getInicio()
+    fin = actualizador.getFin().nil?       ? evento.getFin() : actualizador.getFin()
+
+    tipo_de_evento = TipoEventos[frecuenciaNueva]
+
+    return tipo_de_evento.new(evento.getCalendario(), evento.getId(), evento.getNombre(), inicio, fin, recurrencia)
   end
 
 end

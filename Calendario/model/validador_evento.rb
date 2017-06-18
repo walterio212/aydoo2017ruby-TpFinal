@@ -16,6 +16,7 @@ class ValidadorEvento
 
     #exista el evento
     #superposicion de fechas
+
     #(obtener evento por id, fichando las fechas por las que vengan que no sean null)
   end
 
@@ -100,7 +101,7 @@ class ValidadorEvento
 
   def validar_no_superposicion_de_eventos(eventoAValidar)
 
-      arrayEventos = @persistor.listar_eventos_por_calendario(eventoAValidar.getNombre.downcase)
+      arrayEventos = @persistor.listar_eventos_por_calendario(eventoAValidar.getCalendario().downcase)
 
     arrayEventos.each do |evento|
       if(evento.periodo_dentro_de_Evento?(eventoAValidar.getInicio(),eventoAValidar.getFin()))
@@ -111,6 +112,17 @@ class ValidadorEvento
     end
 
     true
+
+  end
+
+  def validar_recurrencia_actualizador(actualizador)
+
+      eventoEnPersistor = persistor.obtener_evento_por_id(actualizador.getId())
+      eventoNuevo = recrearEvento(eventoEnPersistor, actualizador.getRecurrencia())
+
+      validar_fecha_fin_posterior_fecha_inicio(eventoNuevo)
+      validar_duracion_evento_permitida(eventoNuevo)
+      validar_no_superposicion_de_eventos(eventoNuevo)
 
   end
 
