@@ -4,8 +4,6 @@ TP Final de AyDOO - Calendario
 Integrantes : 
   Walter Davalos
   Valentin Tourriles
-  
-V1.1.0
 
 Link a travis: https://travis-ci.org/walterio212/aydoo2017ruby-TpFinal
 
@@ -33,3 +31,14 @@ Para manejo de eventos decidimos crear una clase para cada tipo distinto de Even
 
 Estos eventos son instanciados dependiendo de la recurrencia. L
 a clase EventoBuilder posee un diccionario que dependiendo de la clave de la recurrencia instancia el tipo de evento correspondiente con los parámetros ingresados.
+
+Existe un tipo de Evento llamado EventoNoRecurrente que se utiliza cuando no se envia recurrencia al evento en el json
+
+
+Code smells
+
+	La clase Persistor deberia llamarse Repositorio por la responsabilidades que cumple de comunicacion con los archivos usados commo persistencia.
+
+	Hay algunos metodos sin usar en la clase de ConvertidorJsonObjeto
+
+	La convencion de nombres de metodos no esta completamente unificada
