@@ -79,7 +79,7 @@ class GestorCalendario
       @validadorEvento.validar_fecha_fin_posterior_fecha_inicio(evento)
       @validadorEvento.validar_id_evento_ya_existente(evento.getId())
       @validadorEvento.validar_nombre_evento_ya_existente_en_calendario(evento.getCalendario(),evento.getNombre())
-      #@validadorEvento.validar_no_superposicion_de_eventos(evento)
+      @validadorEvento.validar_no_superposicion_de_eventos(evento)
       @persistor.crear_evento(evento)
 
     rescue EventoCalendarioNoExistenteError => e

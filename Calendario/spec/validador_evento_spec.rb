@@ -185,7 +185,7 @@ describe 'ValidadorEvento' do
 
     validador = ValidadorEvento.new(persistorDouble)
     fechaInicio = DateTime.now()
-    fechaFin = DateTime.now() + 86400*5 #5 dia
+    fechaFin = DateTime.now() + 5 #5 dia
 
     evento = Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",fechaInicio,fechaFin,Recurrencia.new("anual",Date.new()))
 
@@ -194,7 +194,7 @@ describe 'ValidadorEvento' do
   end
 
 
-  it 'validarDuracionEventoPermitidoSiDuraMenosDe3HorasCumpleLaCondicionDevuelveTrue' do
+  it 'validarDuracionEventoPermitidoSiDuraMenosDe3DiasCumpleLaCondicionDevuelveTrue' do
     persistorDouble = double('Persistor')
 
     validador = ValidadorEvento.new(persistorDouble)
@@ -206,18 +206,110 @@ describe 'ValidadorEvento' do
     expect( validador.validar_duracion_evento_permitida(evento) ).to eq true
   end
 
-  it 'validarEventoExistenteDeberiaDevolverNilPorqueNoExisteElEventoACrear' do
+  it 'validarNoSuperposicionDeEventosAlCrearEventoDeberiaDevovlerErrorAlSuperponerseConEvento1y2' do
 
-    persistorDouble = double('Persistor', :listar_todos_los_eventos => [Evento.new("calendario1","fiesta","fiestaLoca1",Date.new(),Date.new(),Recurrencia.new("anual",Date.new())),
-                                                                             Evento.new("calendario1","fiestaSecreta","fiesaLoca2",Date.new(),Date.new(),Recurrencia.new("anual",Date.new())),
-                                                                             Evento.new("calendario1","fiestaNoTanSecreta","fiestaLoca3",Date.new(),Date.new(),Recurrencia.new("anual",Date.new()))])
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [EventoDiario.new("calendario1","fiestaddd","fiestaLocaf1",DateTime.strptime("2017-06-17T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T20:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("diario",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                        EventoSemanal.new("calendario1","fiestaSecreta","fiesaLocac2",DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T09:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("semanal",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                        EventoAnual.new("calendario1","fiestaNoTanSecreta","fiestaxcLoca3",DateTime.strptime("2017-06-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T12:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("mensual",DateTime.strptime("2017-08-30T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))])
+
+    fechaInicio = DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+    fechaFin = DateTime.strptime("2017-06-17T15:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+
+    evento = EventoAnual.new("calendario1","fidssdaesta2017","fiesadsataLoca4",fechaInicio,fechaFin,Recurrencia.new("anual",DateTime.strptime("2018-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))
 
     validador = ValidadorEvento.new(persistorDouble)
-    expect{ validador.validar_evento_existente("fiesta") }.
-        to raise_error(EventoInexistenteError)
+    expect{ validador.validar_no_superposicion_de_eventos(evento) }.
+        to raise_error(EventoSuperposicionDeEventosError)
 
   end
 
 
+  it 'validarNoSuperposicionDeEventosAlCrearEventoDeberiaCrearEventoAlNoHaberSuperposicion' do
+
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [EventoDiario.new("calendario1","fiestaddd","fiestaLocaf1",DateTime.strptime("2017-06-17T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T20:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("diario",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoSemanal.new("calendario1","fiestaSecreta","fiesaLocac2",DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T09:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("semanal",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoAnual.new("calendario1","fiestaNoTanSecreta","fiestaxcLoca3",DateTime.strptime("2017-06-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T12:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("mensual",DateTime.strptime("2017-08-30T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))])
+
+    fechaInicio = DateTime.strptime("2017-06-17T14:30:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+    fechaFin = DateTime.strptime("2017-06-17T17:45:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+
+    evento = EventoAnual.new("calendario1","fidssdaesta2017","fiesadsataLoca4",fechaInicio,fechaFin,Recurrencia.new("anual",DateTime.strptime("2018-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect( validador.validar_no_superposicion_de_eventos(evento) ).to eq true
+  end
+
+
+  it 'validarNoSuperposicionDeEventosAlCrearEventoDeberiaCrearEventoAlNoHaberSuperposicion' do
+
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [EventoDiario.new("calendario1","fiestaddd","fiestaLocaf1",DateTime.strptime("2017-06-17T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T20:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("diario",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoSemanal.new("calendario1","fiestaSecreta","fiesaLocac2",DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T09:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("semanal",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoAnual.new("calendario1","fiestaNoTanSecreta","fiestaxcLoca3",DateTime.strptime("2017-06-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T12:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("mensual",DateTime.strptime("2017-08-30T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))])
+
+    fechaInicio = DateTime.strptime("2017-06-17T14:30:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+    fechaFin = DateTime.strptime("2017-06-17T17:45:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+
+    evento = EventoDiario.new("calendario1","fidssdaesta2017","fiesadsataLoca4",fechaInicio,fechaFin,Recurrencia.new("diaria",DateTime.strptime("2018-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect( validador.validar_no_superposicion_de_eventos(evento) ).to eq true
+  end
+
+
+  it 'validarNoSuperposicionDeEventosAlCrearEventoDeberiaCrearEventoAlNoHaberSuperposicion' do
+
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [EventoDiario.new("calendario1","fiestaddd","fiestaLocaf1",DateTime.strptime("2017-06-17T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T20:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("diario",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoSemanal.new("calendario1","fiestaSecreta","fiesaLocac2",DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T09:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("semanal",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoAnual.new("calendario1","fiestaNoTanSecreta","fiestaxcLoca3",DateTime.strptime("2017-06-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T12:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("mensual",DateTime.strptime("2017-08-30T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))])
+
+    fechaInicio = DateTime.strptime("2017-07-17T08:30:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+    fechaFin = DateTime.strptime("2017-07-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+
+    evento = EventoDiario.new("calendario1","fidssdaesta2017","fiesadsataLoca4",fechaInicio,fechaFin,Recurrencia.new("diaria",DateTime.strptime("2018-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))
+
+    validador = ValidadorEvento.new(persistorDouble)
+    expect( validador.validar_no_superposicion_de_eventos(evento) ).to eq true
+  end
+
+
+
+  it 'validarNoSuperposicionDeEventosAlCrearEventoDeberiaDevovlerErrorAlSuperponerseConEventoSemanal' do
+
+
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [EventoDiario.new("calendario1","fiestaddd","fiestaLocaf1",DateTime.strptime("2017-06-17T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T20:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("diario",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoSemanal.new("calendario1","fiestaSecreta","fiesaLocac2",DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T09:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("semanal",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoAnual.new("calendario1","fiestaNoTanSecreta","fiestaxcLoca3",DateTime.strptime("2017-06-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T12:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("mensual",DateTime.strptime("2017-08-30T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))])
+
+    fechaInicio = DateTime.strptime("2017-06-24T08:30:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+    fechaFin = DateTime.strptime("2017-06-24T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+
+    evento = EventoDiario.new("calendario1","fidssdaesta2017","fiesadsataLoca4",fechaInicio,fechaFin,Recurrencia.new("diaria",DateTime.strptime("2018-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))
+
+    validador = ValidadorEvento.new(persistorDouble)
+
+    expect{ validador.validar_no_superposicion_de_eventos(evento) }.
+        to raise_error(EventoSuperposicionDeEventosError)
+
+  end
+
+
+  it 'validarNoSuperposicionDeEventosAlCrearEventoDeberiaDevovlerErrorAlSuperponerseConEventoAnual' do
+
+
+    persistorDouble = double('Persistor', :listar_eventos_por_calendario => [EventoDiario.new("calendario1","fiestaddd","fiestaLocaf1",DateTime.strptime("2017-06-17T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T20:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("diario",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoSemanal.new("calendario1","fiestaSecreta","fiesaLocac2",DateTime.strptime("2017-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T09:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("semanal",DateTime.strptime("2017-06-30T18:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"))),
+                                                                             EventoAnual.new("calendario1","fiestaNoTanSecreta","fiestaxcLoca3",DateTime.strptime("2017-06-17T10:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),DateTime.strptime("2017-06-17T12:00:00-03:00","%Y-%m-%dT%H:%M:%S%z"),Recurrencia.new("mensual",DateTime.strptime("2019-08-30T23:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))])
+
+    fechaInicio = DateTime.strptime("2018-06-17T10:30:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+    fechaFin = DateTime.strptime("2018-06-17T15:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")
+
+    evento = EventoDiario.new("calendario1","fidssdaesta2017","fiesadsataLoca4",fechaInicio,fechaFin,Recurrencia.new("diaria",DateTime.strptime("2018-06-17T08:00:00-03:00","%Y-%m-%dT%H:%M:%S%z")))
+
+    validador = ValidadorEvento.new(persistorDouble)
+
+    expect{ validador.validar_no_superposicion_de_eventos(evento) }.
+        to raise_error(EventoSuperposicionDeEventosError)
+
+  end
 
 end
