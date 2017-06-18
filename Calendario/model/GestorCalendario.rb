@@ -97,6 +97,9 @@ class GestorCalendario
       rescue EventoYaExistenteEnCalendarioError => e
         webResponse.setEstado(404)
         webResponse.setRespuesta(e.message)
+      rescue EventoSuperposicionDeEventosError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
     end
 
     webResponse
@@ -168,33 +171,43 @@ class GestorCalendario
 
     begin
 
-    actualizadorEvento = @conversorJsonObjeto.convertir_actualizador(jsonActualizador)
-    @validadorEvento.validar_existe_evento?(actualizadorEvento.getId)
-    evento = @persistor.obtener_evento_por_id(actualizadorEvento.getId)
-    @validadorEvento.validar_calendario_existente(evento.getCalendario())
-    @persistor.modificar_evento(actualizadorEvento)
+      actualizadorEvento = @conversorJsonObjeto.convertir_actualizador(jsonActualizador)
+      @validadorEvento.validar_existe_evento?(actualizadorEvento.getId)
+      evento = @persistor.obtener_evento_por_id(actualizadorEvento.getId)
 
-    rescue EventoCalendarioNoExistenteError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
-    rescue EventoDuracionMaximaInvalidaError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
-    rescue EventoFechasIncoherentesError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
-    rescue EventoIdYaExistenteError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
-    rescue EventoYaExistenteEnCalendarioError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
-    rescue EventoInexistenteError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
-    rescue CalendarioInexistenteError => e
-      webResponse.setEstado(404)
-      webResponse.setRespuesta(e.message)
+      @validadorEvento.validar_recurrencia_actualizador(actualizadorEvento)
+      @validadorEvento.validar_calendario_existente(evento.getCalendario())
+      @validadorEvento.validar_fecha_fin_posterior_fecha_inicio(evento)
+      @validadorEvento.validar_duracion_evento_permitida(evento)
+      @validadorEvento.validar_no_superposicion_de_eventos(evento)
+
+
+      @persistor.modificar_evento(actualizadorEvento)
+
+      rescue EventoCalendarioNoExistenteError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoDuracionMaximaInvalidaError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoFechasIncoherentesError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoIdYaExistenteError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoYaExistenteEnCalendarioError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoInexistenteError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue CalendarioInexistenteError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
+      rescue EventoSuperposicionDeEventosError => e
+        webResponse.setEstado(404)
+        webResponse.setRespuesta(e.message)
 
     end
 

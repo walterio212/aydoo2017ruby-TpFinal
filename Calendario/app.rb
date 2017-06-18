@@ -1,12 +1,12 @@
   require 'sinatra'
   require 'rubygems'
-  require 'json'  #Libreria para parseo de JSON
+  require 'json'
   require_relative './model/GestorCalendario'
   require_relative './model/web_response'
-  
-  #Testear json posteado -> curl -H "Content-Type: application/json" -X POST -d '[{"nombre": "calendario1"},{"nombre": "calendario2"}]'  http://localhost:4567/calendarios
-  #Obtener parametros post ->     numero_obtenido = "#{params['x']}"
- 
+
+
+
+
   #-------------------------------------
   # CREA UN CALENDARIO
   #-------------------------------------

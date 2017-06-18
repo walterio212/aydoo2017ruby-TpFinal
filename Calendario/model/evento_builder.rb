@@ -29,8 +29,6 @@ class EventoBuilder
 
   end
 
-
-
   def crear_recurrencia(recurrencia)
 
     nuevaRecurrencia = nil
@@ -39,6 +37,17 @@ class EventoBuilder
     else
       nuevaRecurrencia = Recurrencia.new(recurrencia["frecuencia"],DateTime.parse(recurrencia["fin"]).to_date)
     end
+
+  end
+
+  def recrear_evento(evento, actualizador)
+    frecuenciaNueva = actualizador.getRecurrencia().getFrecuencia()
+    inicio = actualizador.getInicio().nil? ? evento.getInicio() : actualizador.getInicio()
+    fin = actualizador.getFin().nil?       ? evento.getFin() : actualizador.getFin()
+
+    tipo_de_evento = TipoEventos[frecuenciaNueva]
+
+    return tipo_de_evento.new(evento.getCalendario(), evento.getId(), evento.getNombre(), inicio, fin, recurrencia)
   end
 
 end
