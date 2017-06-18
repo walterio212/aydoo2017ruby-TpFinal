@@ -37,7 +37,9 @@ class EventoBuilder
     if(recurrencia.nil?)
       nuevaRecurrencia = Recurrencia.new("norecurrente", nil)
     else
-      nuevaRecurrencia = Recurrencia.new(recurrencia["frecuencia"],DateTime.parse(recurrencia["fin"]).to_date)
+      finJson = recurrencia["fin"]
+      fechafin = finJson.nil? ? nil : DateTime.parse(recurrencia["fin"]).to_date
+      nuevaRecurrencia = Recurrencia.new(recurrencia["frecuencia"],fechafin)
     end
 
     nuevaRecurrencia

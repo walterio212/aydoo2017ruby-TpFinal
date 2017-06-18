@@ -72,5 +72,18 @@ class EventoBuilderSpec
       expect(evento.getRecurrencia().getFin()).to eq nil
     end
 
+
+    it 'Al crear una recurrencia sin fecha fin carga la recurrencia con fecha fin' do
+
+      json  = '{"calendario":"Calendario1","id":"testEvento","nombre":"fiesta","inicio":"2017-03-31T18:00:00-03:00","fin":"2017-03-31T22:00:00-03:00", "recurrencia": {"frecuencia":"norecurrente", "fin": null }}'
+
+      evento_json = JSON.parse(json);
+
+      evento = builder.crear(evento_json)
+
+      expect(evento.class).to eq EventoNoRecurrente
+      expect(evento.getRecurrencia().getFrecuencia()).to eq "norecurrente"
+      expect(evento.getRecurrencia().getFin()).to eq nil
+    end
   end
 end
