@@ -19,6 +19,7 @@ El validador realiza las operaciones correspondiente s y en caso de lanzar error
 Los objetos ConvertidorJsonObjeto y ConvertidorObjetoJson nos permiten realizar la conversión de las entradas del usuario para trabajar con objetos y viceversa para devolver objetos en formato json al usuario o guardarlos al persistirlos.
 
 Para la persistencia decidimos hacer lo siguiente:
+	La clase Persistor al iniciarse crea una nueva carpeta llamada 'almacenamientoCalendario' si es que no existe y aqui es donde se generaran los archivos del calendario
 	La creación de un nuevo calendario genera un archivo .txt con el nombre del calendario. Dentro de el en la primer línea se guarda el json correspondiente al objeto   calendario. 
 
 Al crear un evento para un calendario especifico este llega al persistor se convierte a json y se guarda en el archivo correspondiente al calendario de ese evento en la línea siguiente. Cada nuevo evento que desee crearse se agregara en una nueva línea del archivo del calendario.
@@ -29,8 +30,7 @@ Al borrar un evento lo que se hace es recrearse el archivo pisando todos los eve
 
 Para manejo de eventos decidimos crear una clase para cada tipo distinto de Evento heredando de ésta teniendo asi: EventoSemanal, EventoMensual, EventoAnual, EventoDiario. Cada uno de estos eventos debe implementar los métodos de  fecha_Ocupada?(fecha) que indica si la fecha ingresada esta ocupada por el evento y el método periodo_dentro_de_evento(fechainicio, fechafin) que indica si el periodo ingresado se encuentra solapado con el evento actual.
 
-Estos eventos son instanciados dependiendo de la recurrencia. L
-a clase EventoBuilder posee un diccionario que dependiendo de la clave de la recurrencia instancia el tipo de evento correspondiente con los parámetros ingresados.
+Estos eventos son instanciados dependiendo de la recurrencia. La clase EventoBuilder posee un diccionario que dependiendo de la clave de la recurrencia instancia el tipo de evento correspondiente con los parámetros ingresados.
 
 Existe un tipo de Evento llamado EventoNoRecurrente que se utiliza cuando no se envia recurrencia al evento en el json
 
