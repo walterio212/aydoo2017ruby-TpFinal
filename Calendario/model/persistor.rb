@@ -67,7 +67,7 @@ class Persistor
 
   def crear_evento(evento)
     fullName = obtener_fullname(evento.getCalendario())
-    archivo = @file.open(fullName, "a+") do |f|     
+    archivo = @file.open(fullName, "a+") do |f|
       json = @convertidorObjetoJson.convertir_calendario(evento)
       f.puts(json)
       f.close      

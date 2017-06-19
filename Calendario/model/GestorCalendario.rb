@@ -173,7 +173,6 @@ class GestorCalendario
 
       actualizadorEvento = @conversorJsonObjeto.convertir_actualizador(jsonActualizador)
       @validadorEvento.validar_existe_evento?(actualizadorEvento.getId)
-      evento = @persistor.obtener_evento_por_id(actualizadorEvento.getId)
 
       @validadorEvento.validar_recurrencia_actualizador(actualizadorEvento)
 

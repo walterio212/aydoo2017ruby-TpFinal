@@ -13,15 +13,6 @@ class ValidadorEvento
     @builder   = builder
   end
 
-  def validar_modificar_evento(evento)
-    #TODO
-
-    #exista el evento
-    #superposicion de fechas
-
-    #(obtener evento por id, fichando las fechas por las que vengan que no sean null)
-  end
-
   def validar_existe_evento?(id)
 
     arrayEventos = @persistor.listar_todos_los_eventos()
